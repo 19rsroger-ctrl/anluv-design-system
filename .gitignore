@@ -1,5 +1,9 @@
 # Capturas de contexto del plugin (no forman parte del paquete)
 plugin-source/
 
+# Metadatos internos de Open Design (versionado y preview local)
+.file-versions/
+*.artifact.json
+
 # Sistema
 .DS_Store
