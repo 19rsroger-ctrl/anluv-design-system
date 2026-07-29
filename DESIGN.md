@@ -204,9 +204,15 @@ Rail horizontal con scroll-snap (`grid-auto-columns: min(320px, 82vw)`): marco g
 
 ### Badges y chips
 `.badge` píldora uppercase 11.5 px: `badge-neutro`, `badge-digital` (gradiente), `badge-flash` (turquesa suave), `badge-tipo` (oscuro/blur sobre foto). `.chip-activo` muestra la búsqueda vigente con botón de quitar. `.cart-count` burbuja que escala con rebote `cubic-bezier(.34,1.56,.64,1)`.
+### Buscador con IA (`.searchbox` + `.search-panel`)
 
-### Buscador multimodal (`.searchbox` + `.search-panel`)
-Input píldora 46 px con lupa y acciones (voz/foto); foco con `border-color: accent` + anillo `0 0 0 4px accent-soft`. Panel flotante con tabs Texto/Foto/Voz, sugerencias e historial (localStorage `anluv:busquedas`), dropzone punteada, micrófono con pulso `@keyframes pulso`. Variante sticky dentro del catálogo (`.busca-sticky`).
+Input píldora 46 px con lupa y **dos acciones** a la derecha (voz + foto, `.icon-btn` circulares); foco con `border-color: accent` + anillo `0 0 0 4px accent-soft`. Al enfocar se abre un **panel flotante** (`.search-panel`, radio 20 px, `shadow-2`) con tabs **Texto / Foto / Voz**:
+
+- **Texto** — sugerencias e historial persistente (`localStorage("anluv:busquedas")`, máx. 5, compartido entre todas las cajas). La IA interpreta lenguaje natural (intención, categoría, presupuesto «que no pase de dos mil soles»).
+- **Foto** — `.dropzone` punteada con drag & drop + selector; la IA identifica el producto y muestra coincidencias. Alternativa honesta: «Mejor, se la envío por WhatsApp».
+- **Voz** — `.voice-mic` (64 px turquesa, `shadow-cta`) con pulso `@keyframes pulso`; transcribe con Web Speech API (`es-PE`) y aplica la misma interpretación de texto. Fallback claro si el navegador no la admite.
+
+La interpretación de la IA se muestra en un chip `accent-soft` dentro del panel (categoría · uso · presupuesto). Variante sticky dentro del catálogo (`.busca-sticky`). Ejemplo funcional completo: `ui_kits/app/components/buscador-ia.html`.
 
 ### Filtros (`.filtros`)
 Panel sticky con grupos en uppercase 12 px, checkboxes con `accent-color: var(--accent)`, rango de precio con salida «Hasta S/ 5,300.00», botón «Limpiar filtros» subrayado. Acordeón en móvil.

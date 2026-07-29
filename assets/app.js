@@ -487,6 +487,17 @@
       window.open(waLink('Hola ANLUV, les envío una foto del producto que busco para que me ayuden a cotizarlo.'), '_blank', 'noopener');
     });
 
+    /* Botones rápidos del input: saltan directo al modo voz / foto */
+    const irModo = modo => {
+      buscador.abrir();
+      const tab = $$('.search-tab', panel).find(t => t.dataset.modo === modo);
+      if (tab) tab.click();
+    };
+    const btnVoz = $('[data-tab-voz]', root);
+    const btnFoto = $('[data-tab-foto]', root);
+    if (btnVoz) btnVoz.addEventListener('click', () => irModo('voz'));
+    if (btnFoto) btnFoto.addEventListener('click', () => irModo('foto'));
+
     return buscador;
   }
   const buscadores = $$('.searchbox-wrap').map(crearBuscador).filter(Boolean);

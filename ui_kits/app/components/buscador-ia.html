@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscador con IA — ANLUV UI Kit</title>
+<link rel="stylesheet" href="../../../colors_and_type.css">
+<link rel="stylesheet" href="../anluv-tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { padding: 48px 20px 100px; }
+  .wrap { width: min(760px, 100%); margin-inline: auto; display: grid; gap: 40px; }
+  @media (max-width: 640px) {
+    body { padding: 28px 14px 80px; }
+    .wrap { gap: 28px; }
+  }
+  header { display: grid; gap: 12px; max-width: 640px; }
+  header h1 { font-size: clamp(28px, 4vw, 40px); }
+  header p { color: var(--muted); }
+  section > h2 { font-size: 20px; margin-bottom: 14px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-1); display: grid; gap: 14px; align-content: start; }
+  @media (max-width: 640px) { .panel { padding: 16px 14px; border-radius: 14px; } }
+  .panel > small { color: var(--muted); font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; font-weight: 600; }
+  nav.volver a { color: var(--accent); font-size: 14px; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  /* ========== Extraído literal de assets/anluv.css ========== */
+  .searchbox { position: relative; flex: 1; max-width: 560px; display: flex; align-items: center; width: 100%; }
+  .searchbox .s-lupa { position: absolute; left: 15px; color: var(--muted); pointer-events: none; }
+  .searchbox input {
+    width: 100%; height: 46px; padding: 0 96px 0 42px;
+    border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface); outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    font: 400 15px/1 var(--font-body); color: var(--fg);
+  }
+  .searchbox input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .search-actions { position: absolute; right: 6px; display: flex; gap: 4px; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; color: var(--fg);
+    border: 1px solid var(--border); background: var(--surface);
+    transition: background .18s, border-color .18s, transform .12s;
+  }
+  .icon-btn:hover { background: var(--surface-2); }
+  .icon-btn:active { transform: scale(.92); }
+
+  /* ——— Adaptación móvil del buscador ——— */
+  @media (max-width: 640px) {
+    .searchbox { max-width: none; isolation: isolate; }
+    .searchbox .s-lupa { left: 13px; z-index: 3; }
+    .searchbox input {
+      height: 48px;                 /* ≥44px touch target */
+      padding: 0 92px 0 38px;
+      font-size: 16px;              /* evita el zoom automático de iOS al enfocar */
+      -webkit-appearance: none; appearance: none;
+      position: relative; z-index: 1;
+    }
+    .searchbox input::-webkit-search-cancel-button { display: none; }
+    /* Iconos voz/cámara siempre visibles y táctiles */
+    .search-actions {
+      right: 8px; gap: 2px; z-index: 3;
+      display: flex !important; visibility: visible !important; opacity: 1 !important;
+    }
+    .search-actions .icon-btn {
+      width: 40px; height: 40px; flex: none;
+      color: var(--primary); background: var(--surface-2);
+      display: grid !important; place-items: center;
+    }
+    .search-actions .icon-btn:hover { background: var(--accent-soft); }
+    .search-actions .icon-btn svg { width: 19px; height: 19px; display: block; }
+  }
+  @media (max-width: 380px) {
+    .searchbox input { padding-right: 86px; }
+    .search-actions .icon-btn { width: 38px; height: 38px; }
+    .searchbox input::placeholder { font-size: 13px; }
+  }
+
+  /* Panel de búsqueda (tabs texto/foto/voz) */
+  .search-panel {
+    position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 20;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-2);
+    padding: 14px;
+    display: none;
+    max-height: min(70vh, 560px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .search-panel.open { display: block; }
+  .search-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .search-tab {
+    flex: 1; min-width: 0; padding: 9px 10px; border-radius: 12px;
+    font: 550 13px/1 var(--font-body); letter-spacing: .02em;
+    color: var(--muted); background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    transition: background .18s, color .18s;
+    min-height: 44px;               /* touch target */
+  }
+  .search-tab.active { background: var(--accent-soft); color: var(--fg); }
+  .suggest-list { list-style: none; display: grid; gap: 2px; }
+  .suggest-list li button {
+    width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px;
+    display: flex; align-items: center; gap: 10px; color: var(--fg);
+    font: 400 14px/1.3 var(--font-body);
+    transition: background .15s;
+    min-height: 44px;
+  }
+  .suggest-list li button:hover { background: var(--surface-2); }
+  .suggest-list li button svg { flex: none; color: var(--muted); }
+  .suggest-list .s-tag { font: 550 11px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 8px 12px 2px; }
+  .dropzone {
+    border: 1.5px dashed var(--border); border-radius: 14px;
+    padding: 22px 16px; text-align: center; color: var(--muted);
+    display: grid; gap: 8px; justify-items: center;
+    transition: border-color .2s, background .2s;
+    cursor: pointer;
+  }
+  .dropzone.over { border-color: var(--accent); background: var(--accent-soft); color: var(--fg); }
+  .dropzone-estado { font-size: 12.5px; }
+  .voice-box { display: grid; justify-items: center; gap: 10px; padding: 14px 0 4px; text-align: center; }
+  .voice-mic {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; box-shadow: var(--shadow-cta);
+    transition: transform .15s;
+  }
+  .voice-mic:hover { transform: scale(1.06); }
+  .voice-mic.listening { animation: pulso 1.4s ease-in-out infinite; }
+  @keyframes pulso { 50% { box-shadow: 0 0 0 14px color-mix(in oklch, var(--accent) 18%, transparent); } }
+  .voice-hint { font-size: 13px; color: var(--muted); max-width: 40ch; }
+
+  /* ——— Panel en móvil: full-bleed dentro del margen de página ——— */
+  @media (max-width: 640px) {
+    .search-panel {
+      position: fixed;
+      top: auto; bottom: 0; left: 0; right: 0;
+      border-radius: 20px 20px 0 0;
+      border-bottom: 0;
+      padding: 8px 16px calc(20px + env(safe-area-inset-bottom));
+      max-height: 78svh;
+      z-index: 70;
+      animation: panel-subir .32s cubic-bezier(.65,0,.35,1);
+    }
+    /* handle del sheet */
+    .search-panel::before {
+      content: ""; display: block; width: 40px; height: 4px;
+      border-radius: 999px; background: var(--border);
+      margin: 4px auto 12px;
+    }
+    @keyframes panel-subir { from { transform: translateY(24px); opacity: 0; } }
+    .search-tab { font-size: 12.5px; gap: 5px; padding: 8px 6px; }
+    .dropzone { padding: 18px 12px; }
+    .voice-hint { max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .search-panel { animation: none !important; }
+    .voice-mic.listening { animation: none; }
+  }
+  /* Backdrop del sheet en móvil: permite cerrar tocando fuera */
+  .sheet-backdrop { display: none; }
+  @media (max-width: 640px) {
+    .sheet-backdrop {
+      display: block; position: fixed; inset: 0; z-index: 19;
+      background: oklch(0.25 0.045 240 / 0.32);
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    .sheet-backdrop.visible { opacity: 1; pointer-events: auto; }
+  }
+  /* ========== Fin extracción anluv.css ========== */
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border-radius: 999px; font: 560 14px/1 var(--font-body); letter-spacing: .02em; border: 1px solid transparent; transition: transform .12s, box-shadow .2s; max-width: 100%; white-space: normal; text-align: center; }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn-ghost { background: var(--surface); border-color: var(--border); color: var(--fg); }
+  .btn-ghost:hover { background: var(--surface-2); }
+  .btn-sm { min-height: 36px; padding: 0 14px; font-size: 13px; }
+
+  /* Chip de interpretación IA (contexto del panel) */
+  .ia-interpreta {
+    display: none; align-items: flex-start; gap: 10px;
+    margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+    background: var(--accent-soft); color: var(--fg);
+    font: 400 13px/1.5 var(--font-body);
+    overflow-wrap: break-word;
+  }
+  .ia-interpreta.visible { display: flex; }
+  .ia-interpreta svg { flex: none; margin-top: 1px; color: var(--accent); }
+  .ia-interpreta b { font-weight: 600; }
+  @media (max-width: 640px) { .ia-interpreta { font-size: 12.5px; padding: 10px 12px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="volver"><a href="index.html">← UI Kit</a></nav>
+  <header>
+    <span class="eyebrow">07 · Buscador con IA</span>
+    <h1>Búsqueda multimodal con IA</h1>
+    <p>El buscador interpreta <b>texto</b>, <b>voz</b> e <b>imagen</b>. La capa de IA entiende lenguaje natural («una laptop para estudiar que no pase de dos mil soles»), transcribe la voz con Web Speech API (<code>es-PE</code>) y recibe fotos para identificar el producto. Estructura y estilos extraídos de <code>assets/anluv.css</code> + <code>assets/app.js</code>. En móvil el panel se convierte en un <b>bottom sheet</b> anclado al borde inferior (patrón nativo de comercio móvil) y el input sube a 16 px para evitar el zoom de iOS.</p>
+  </header>
+
+  <section data-od-id="kit-buscador-ia">
+    <h2>Buscador completo (funcional)</h2>
+    <div class="panel">
+      <small>.searchbox + .search-panel — enfoca el input para abrir el panel</small>
+
+      <div class="searchbox searchbox-wrap" data-od-id="buscador-ia">
+        <svg class="s-lupa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" placeholder="Busca por texto, voz o foto…" aria-label="Buscar productos">
+        <div class="search-actions">
+          <button class="icon-btn" type="button" aria-label="Búsqueda por voz" data-tab-voz>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Búsqueda por foto" data-tab-foto>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+          </button>
+        </div>
+
+        <!-- Panel multimodal -->
+        <div class="search-panel" role="dialog" aria-label="Opciones de búsqueda">
+          <div class="search-tabs" role="tablist">
+            <button class="search-tab active" data-modo="texto" role="tab" aria-selected="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7V5h16v2M9 20h6M12 5v15"/></svg>
+              Texto
+            </button>
+            <button class="search-tab" data-modo="foto" role="tab" aria-selected="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+              Foto
+            </button>
+            <button class="search-tab" data-modo="voz" role="tab" aria-selected="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+              Voz
+            </button>
+          </div>
+
+          <div class="search-modo" data-modo="texto">
+            <ul class="suggest-list"></ul>
+          </div>
+
+          <div class="search-modo" data-modo="foto" style="display:none">
+            <div class="dropzone">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <p><b>Arrastra una foto del producto</b> o toca para elegirla</p>
+              <p class="dropzone-estado">La IA la identifica y te muestra productos parecidos.</p>
+              <input type="file" accept="image/*" class="sr-only" aria-label="Elegir foto">
+            </div>
+            <div style="margin-top:10px; text-align:center">
+              <button type="button" class="btn btn-ghost btn-sm foto-wa">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.96L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Z"/></svg>
+                Mejor, se la envío por WhatsApp
+              </button>
+            </div>
+          </div>
+
+          <div class="search-modo" data-modo="voz" style="display:none">
+            <div class="voice-box">
+              <button type="button" class="voice-mic" aria-label="Iniciar búsqueda por voz">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+              </button>
+              <p class="voice-hint">Toca el micrófono y dinos qué necesitas, por ejemplo: «una laptop para estudiar que no pase de dos mil soles».</p>
+            </div>
+          </div>
+
+          <p class="ia-interpreta" role="status">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9Z"/></svg>
+            <span class="ia-texto"></span>
+          </p>
+        </div>
+      </div>
+
+      <small>Resultado de la última búsqueda (evento <code>anluv:buscar</code>)</small>
+      <p id="resultado" style="font:400 14px/1.5 var(--font-body); color:var(--muted)">Todavía no has buscado nada. Prueba con texto, voz o una foto.</p>
+    </div>
+  </section>
+
+  <section data-od-id="kit-ia-notas">
+    <h2>Cómo interpreta la IA cada modo</h2>
+    <div class="panel">
+      <small>Reglas de interpretación (demo local, sin backend)</small>
+      <ul style="list-style:none; display:grid; gap:12px; font:400 14px/1.55 var(--font-body)">
+        <li style="display:flex; gap:10px"><svg style="flex:none;color:var(--accent);margin-top:2px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7V5h16v2M9 20h6M12 5v15"/></svg><span><b>Texto:</b> entiende intención y presupuesto en lenguaje natural («laptop para diseño que no pase de cinco mil») y extrae la categoría y el tope de precio.</span></li>
+        <li style="display:flex; gap:10px"><svg style="flex:none;color:var(--accent);margin-top:2px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg><span><b>Voz:</b> transcribe con Web Speech API en <code>es-PE</code> y aplica la misma interpretación de texto. Si el navegador no la admite, ofrece escribir o WhatsApp.</span></li>
+        <li style="display:flex; gap:10px"><svg style="flex:none;color:var(--accent);margin-top:2px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg><span><b>Imagen:</b> recibe una foto del producto y la IA la identifica para mostrar coincidencias; en esta demo confirma la recepción y busca la categoría general.</span></li>
+      </ul>
+      <small>Historial persistente: <code>localStorage("anluv:busquedas")</code>, máx. 5 entradas compartidas entre todas las cajas de búsqueda.</small>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  const SUGERENCIAS = [
+    'laptop para estudiar',
+    'laptop para editar videos',
+    'mouse inalámbrico',
+    'windows 11 original',
+    'teclado mecánico español',
+    'antivirus eset',
+  ];
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+
+  function historialBusquedas() {
+    try { return JSON.parse(localStorage.getItem('anluv:busquedas') || '[]'); } catch (_) { return []; }
+  }
+  function guardarBusqueda(q) {
+    if (!q) return;
+    let h = historialBusquedas().filter(x => x.toLowerCase() !== q.toLowerCase());
+    h.unshift(q);
+    try { localStorage.setItem('anluv:busquedas', JSON.stringify(h.slice(0, 5))); } catch (_) {}
+  }
+
+  /* Interpretación IA ligera del texto: intención + presupuesto */
+  function interpretar(q) {
+    if (!q) return null;
+    const t = q.toLowerCase();
+    const cats = [
+      [/laptop|port[aá]til|notebook/, 'laptops'],
+      [/gpu|tarjeta gr[aá]fica|gr[aá]fica|video/, 'tarjetas gráficas'],
+      [/ssd|nvme|disco|almacenamiento/, 'almacenamiento SSD'],
+      [/mouse|rat[oó]n/, 'mouse'],
+      [/teclado/, 'teclados'],
+      [/aud[ií]fono|headset|auricular/, 'audífonos'],
+      [/parlante|altavoz|speaker/, 'parlantes'],
+      [/windows|office|antivirus|licencia|software/, 'licencias digitales'],
+      [/refrigeraci[oó]n|cooler|ventilador|base/, 'refrigeración'],
+      [/monitor|pantalla/, 'monitores'],
+    ];
+    let cat = null;
+    for (const [re, nombre] of cats) { if (re.test(t)) { cat = nombre; break; } }
+    let presupuesto = null;
+    const mMoney = t.match(/(?:de|hasta|menos de|que no pase de|m[aá]ximo|por)?\s*(?:s\/\.?|soles?)?\s*(\d[\d.,]*)\s*(?:soles?|s\/\.?)/);
+    const mMil = t.match(/(\d+(?:[.,]\d+)?)\s*mil/);
+    if (mMoney) presupuesto = mMoney[1].replace(/\./g, '').replace(',', '.');
+    else if (mMil) presupuesto = String(parseFloat(mMil[1].replace(',', '.')) * 1000);
+    const uso = (t.match(/para (estudiar|trabajar|diseñar|editar|jugar|gaming|oficina|clases)/) || [])[1] || null;
+    return { q, cat, presupuesto, uso };
+  }
+  function textoInterpretacion(it) {
+    let out = 'La IA interpreta tu búsqueda: ';
+    const partes = [];
+    if (it.cat) partes.push('categoría <b>' + it.cat + '</b>');
+    if (it.uso) partes.push('uso <b>' + it.uso + '</b>');
+    if (it.presupuesto) partes.push('presupuesto hasta <b>S/ ' + Number(it.presupuesto).toLocaleString('es-PE') + '</b>');
+    if (!partes.length) return out + 'búsqueda general por «<b>' + it.q + '</b>».';
+    return out + partes.join(' · ') + '.';
+  }
+
+  const root = $('[data-od-id="buscador-ia"]');
+  const input = $('input[type="search"]', root);
+  const panel = $('.search-panel', root);
+  const resultado = $('#resultado');
+  const iaBox = $('.ia-interpreta', panel);
+  const iaTexto = $('.ia-texto', iaBox);
+
+  /* Backdrop móvil: se inyecta junto al panel y cierra el sheet al tocarlo */
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sheet-backdrop';
+  document.body.appendChild(backdrop);
+
+  const buscador = {
+    modo: 'texto',
+    abrir() { this.pintarSugerencias(); panel.classList.add('open'); backdrop.classList.add('visible'); },
+    cerrar() { panel.classList.remove('open'); backdrop.classList.remove('visible'); },
+    pintarSugerencias() {
+      const ul = $('.suggest-list', panel);
+      const h = historialBusquedas();
+      let html = '';
+      if (h.length) {
+        html += '<li class="s-tag">Tus últimas búsquedas</li>' + h.map(q =>
+          '<li><button type="button" data-q="' + q.replace(/"/g, '&quot;') + '">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>' + q + '</button></li>').join('');
+      }
+      html += '<li class="s-tag">Sugerencias</li>' + SUGERENCIAS.filter(s => !h.includes(s)).slice(0, 4).map(q =>
+        '<li><button type="button" data-q="' + q + '">' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>' + q + '</button></li>').join('');
+      ul.innerHTML = html;
+      $$('button[data-q]', ul).forEach(b => b.addEventListener('click', () => {
+        input.value = b.dataset.q;
+        this.ejecutar(b.dataset.q, 'texto');
+      }));
+    },
+    mostrarInterpretacion(q, via) {
+      const it = interpretar(q);
+      if (!it) return;
+      iaTexto.innerHTML = (via === 'voz' ? 'Escuché «<b>' + q + '</b>». ' : '') + textoInterpretacion(it);
+      iaBox.classList.add('visible');
+    },
+    voz(btn) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const hint = $('.voice-hint', panel);
+      if (!SR) {
+        if (hint) hint.textContent = 'Tu navegador no admite búsqueda por voz. Escríbenos o mándanos un WhatsApp y te ayudamos igual.';
+        return;
+      }
+      const rec = new SR();
+      rec.lang = 'es-PE';
+      rec.interimResults = false;
+      btn.classList.add('listening');
+      if (hint) hint.textContent = 'Te escucho… describe lo que necesitas con tus palabras.';
+      rec.onresult = ev => {
+        const texto = ev.results[0][0].transcript;
+        input.value = texto;
+        this.ejecutar(texto, 'voz');
+      };
+      rec.onerror = () => { if (hint) hint.textContent = 'No te escuché bien. Inténtalo de nuevo o escribe tu búsqueda.'; };
+      rec.onend = () => btn.classList.remove('listening');
+      try { rec.start(); } catch (_) { btn.classList.remove('listening'); }
+    },
+    foto(archivo) {
+      if (!archivo) return;
+      const estado = $('.dropzone-estado', panel);
+      if (estado) estado.textContent = 'Foto recibida: ' + archivo.name + '. La IA la está identificando…';
+      const reader = new FileReader();
+      reader.onload = () => {
+        iaTexto.innerHTML = 'Imagen analizada: la IA detectó un producto de tecnología y muestra coincidencias generales del catálogo.';
+        iaBox.classList.add('visible');
+        this.ejecutar('laptop', 'foto');
+      };
+      try { reader.readAsDataURL(archivo); } catch (_) { this.ejecutar('laptop', 'foto'); }
+    },
+    ejecutar(q, via) {
+      guardarBusqueda(q);
+      if (via !== 'foto') this.mostrarInterpretacion(q, via);
+      resultado.innerHTML = 'Búsqueda por <b>' + via + '</b>: «<b>' + q + '</b>» — en la tienda real filtra el catálogo (evento <code>anluv:buscar</code>).';
+      document.dispatchEvent(new CustomEvent('anluv:buscar', { detail: { q, via } }));
+      /* mantenemos el panel abierto un instante para que se lea la interpretación IA */
+      clearTimeout(this._t);
+      this._t = setTimeout(() => this.cerrar(), via === 'texto' ? 1600 : 2400);
+    },
+  };
+
+  input.addEventListener('focus', () => buscador.abrir());
+  backdrop.addEventListener('click', () => buscador.cerrar());
+  document.addEventListener('click', e => { if (!root.contains(e.target) && e.target !== backdrop) buscador.cerrar(); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); buscador.ejecutar(input.value.trim(), 'texto'); }
+  });
+
+  $$('.search-tab', panel).forEach(tab => {
+    tab.addEventListener('click', () => {
+      buscador.modo = tab.dataset.modo;
+      $$('.search-tab', panel).forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+      $$('.search-modo', panel).forEach(m => m.style.display = m.dataset.modo === buscador.modo ? '' : 'none');
+      if (buscador.modo === 'texto') input.focus();
+    });
+  });
+
+  /* Botones del input que saltan directo al modo voz / foto */
+  const btnVoz = $('[data-tab-voz]', root);
+  const btnFoto = $('[data-tab-foto]', root);
+  function irModo(modo) {
+    buscador.abrir();
+    $$('.search-tab', panel).find(t => t.dataset.modo === modo)?.click();
+  }
+  if (btnVoz) btnVoz.addEventListener('click', () => irModo('voz'));
+  if (btnFoto) btnFoto.addEventListener('click', () => irModo('foto'));
+
+  const micBtn = $('.voice-mic', panel);
+  if (micBtn) micBtn.addEventListener('click', () => buscador.voz(micBtn));
+
+  const dz = $('.dropzone', panel);
+  const file = $('input[type="file"]', panel);
+  if (dz && file) {
+    dz.addEventListener('click', () => file.click());
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.classList.remove('over');
+      buscador.foto(e.dataTransfer.files && e.dataTransfer.files[0]);
+    });
+    file.addEventListener('change', () => buscador.foto(file.files && file.files[0]));
+  }
+  const fotoWa = $('.foto-wa', panel);
+  if (fotoWa) fotoWa.addEventListener('click', () => {
+    window.open('https://wa.me/51906186548?text=' + encodeURIComponent('Hola ANLUV, les envío una foto del producto que busco para que me ayuden a cotizarlo.'), '_blank', 'noopener');
+  });
+})();
+</script>
+</body>
+</html>

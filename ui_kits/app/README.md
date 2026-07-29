@@ -12,12 +12,13 @@ Applied interface kit of the ANLUV design system («calma oceánica premium»). 
 | `components/tarjetas.html` | `.card` physical product, `.card.es-digital` with gradient frame, `.lic-card` license rail card, `.confianza-card` |
 | `components/carrito-y-compra.html` | `.cart-item`, `.qty`, `.cart-vacio`, `.totales` (IGV 18 %), `.qb-pasos`, copyable payment data |
 | `components/estados-y-confianza.html` | `.vacio`, `.opiniones-vacias`, `.garantia-nota`, `.toast`, `.confianza-card`, `.pasos` |
-| `components/navegacion.html` | Topbar with `.searchbox`, `.magic-nav` with sliding indicator, `.miga`, `.chip-activo` |
+| `components/navegacion.html` | Topbar with `.searchbox` (voice + photo actions), `.magic-nav` with sliding indicator, `.miga`, `.chip-activo` |
 | `components/preview-card.html` | `PreviewCard` — composed preview card (icon header + body + meta/link footer) extracted from the trust blocks |
+| `components/buscador-ia.html` | AI multimodal search — `.searchbox` + `.search-panel` with Texto/Foto/Voz tabs, suggestion list + history, dropzone, pulsing `.voice-mic`, natural-language interpretation (Web Speech API `es-PE`, localStorage history) |
 
 ### Canonical component mapping
 
-For reviewers coming from Claude Design component vocabulary, the kit blocks map as: the topbar/nav shell in `components/navegacion.html` is the **App** shell with its **Sidebar**-equivalent drawers; `components/preview-card.html` is the canonical **PreviewCard**; the payment-data row in `components/carrito-y-compra.html` plays the **Composer** role (user input → confirmed action); and the search input in `components/navegacion.html` is the **InputBar** of the storefront.
+For reviewers coming from Claude Design component vocabulary, the kit blocks map as: the topbar/nav shell in `components/navegacion.html` is the **App** shell with its **Sidebar**-equivalent drawers; `components/preview-card.html` is the canonical **PreviewCard**; the payment-data row in `components/carrito-y-compra.html` plays the **Composer** role (user input → confirmed action); and the AI search in `components/buscador-ia.html` is the **InputBar** of the storefront (multimodal input → interpreted query).
 
 ## Usage
 

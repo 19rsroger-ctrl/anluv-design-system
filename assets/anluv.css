@@ -104,7 +104,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
 .logo svg { width: 34px; height: 34px; }
 .logo .ola { color: var(--accent); }
 
-.searchbox { position: relative; flex: 1; max-width: 520px; }
+.searchbox { position: relative; flex: 1; max-width: 520px; isolation: isolate; }
 .searchbox input {
   width: 100%; height: 46px;
   padding: 0 112px 0 46px;
@@ -112,17 +112,20 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
   border: 1.5px solid var(--border);
   background: var(--surface);
   outline: none;
+  position: relative; z-index: 1;
   transition: border-color .2s, box-shadow .2s;
 }
 .searchbox input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
-.searchbox .s-lupa { position: absolute; left: 16px; top: 50%; translate: 0 -50%; color: var(--muted); pointer-events: none; }
-.search-actions { position: absolute; right: 6px; top: 50%; translate: 0 -50%; display: flex; gap: 4px; }
+.searchbox .s-lupa { position: absolute; left: 16px; top: 50%; translate: 0 -50%; color: var(--muted); pointer-events: none; z-index: 2; }
+.search-actions { position: absolute; right: 6px; top: 50%; translate: 0 -50%; display: flex; gap: 4px; z-index: 2; }
 .icon-btn {
   width: 38px; height: 38px; border-radius: 50%;
   display: grid; place-items: center;
   color: var(--muted);
   transition: background .18s, color .18s, transform .12s;
 }
+.search-actions .icon-btn { color: var(--primary); background: var(--surface-2); }
+.search-actions .icon-btn:hover { background: var(--accent-soft); }
 .icon-btn:hover { background: var(--surface-2); color: var(--fg); }
 .icon-btn:active { transform: scale(.92); }
 
@@ -817,3 +820,51 @@ html[data-theme='dark'] .cta-movil-precio .precio-m { color: var(--fg); }
 }
 .busca-movil { display: none; padding: calc(var(--topbar-h) + 10px) 0 0; }
 @media (max-width: 720px) { .busca-movil { display: block; } }
+
+/* — Buscador móvil: input con botones + panel como bottom sheet — */
+@media (max-width: 720px) {
+  .busca-movil .searchbox { max-width: none; flex: none; width: 100%; isolation: isolate; }
+  .busca-movil .searchbox input {
+    height: 48px; padding: 0 92px 0 42px; font-size: 16px;
+    -webkit-appearance: none; appearance: none;
+    position: relative; z-index: 1;
+  }
+  .busca-movil .searchbox input::-webkit-search-cancel-button { display: none; }
+  /* Acciones siempre visibles sobre el input */
+  .busca-movil .search-actions {
+    position: absolute; right: 8px; top: 50%; translate: 0 -50%;
+    display: flex !important; flex: none; gap: 2px; z-index: 3;
+    visibility: visible !important; opacity: 1 !important;
+  }
+  .busca-movil .search-actions .icon-btn {
+    width: 40px; height: 40px; flex: none;
+    display: grid !important; place-items: center;
+    color: var(--primary); background: var(--surface-2);
+    border-radius: 50%;
+  }
+  .busca-movil .search-actions .icon-btn:hover { background: var(--accent-soft); }
+  .busca-movil .search-actions .icon-btn svg { width: 19px; height: 19px; flex: none; display: block; }
+  .busca-movil .s-lupa { left: 14px; z-index: 3; }
+  /* Pantallas muy angostas: prioriza que los iconos respiren */
+  @media (max-width: 380px) {
+    .busca-movil .searchbox input { padding-right: 86px; }
+    .busca-movil .search-actions .icon-btn { width: 38px; height: 38px; }
+  }
+  .search-panel {
+    position: fixed; top: auto; bottom: 0; left: 0; right: 0;
+    border-radius: 20px 20px 0 0; border-bottom: 0;
+    padding: 8px 16px calc(20px + env(safe-area-inset-bottom));
+    max-height: 78svh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; z-index: 70;
+    animation: sheet-up .32s cubic-bezier(.65,0,.35,1);
+  }
+  .search-panel::before {
+    content: ""; display: block; width: 40px; height: 4px;
+    border-radius: 999px; background: var(--border); margin: 4px auto 12px;
+  }
+  @keyframes sheet-up { from { transform: translateY(24px); opacity: 0; } }
+  .search-tab { min-height: 44px; font-size: 12.5px; gap: 5px; }
+  .suggest-list li button { min-height: 44px; }
+  .voice-hint { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .search-panel { animation: none; } }

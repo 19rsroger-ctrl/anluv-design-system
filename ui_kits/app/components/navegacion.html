@@ -26,13 +26,22 @@
   .searchbox { position: relative; flex: 1; max-width: 520px; display: flex; align-items: center; }
   .searchbox .s-lupa { position: absolute; left: 15px; color: var(--muted); pointer-events: none; }
   .searchbox input {
-    width: 100%; height: 46px; padding: 0 52px 0 42px;
+    width: 100%; height: 46px; padding: 0 96px 0 42px;
     border-radius: 999px; border: 1px solid var(--border);
     background: var(--surface); outline: none;
     transition: border-color .2s, box-shadow .2s;
+    font: 400 15px/1 var(--font-body); color: var(--fg);
   }
   .searchbox input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
   .search-actions { position: absolute; right: 6px; display: flex; gap: 4px; }
+
+  /* Panel multimodal (versión compacta; la guía completa está en buscador-ia.html) */
+  .search-panel { position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 20; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-2); padding: 14px; display: none; }
+  .search-panel.open { display: block; }
+  .search-tabs { display: flex; gap: 6px; }
+  .search-tab { flex: 1; padding: 9px 10px; border-radius: 12px; font: 550 13px/1 var(--font-body); color: var(--muted); background: var(--surface-2); display: flex; align-items: center; justify-content: center; gap: 7px; transition: background .18s, color .18s; }
+  .search-tab.active { background: var(--accent-soft); color: var(--fg); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
   .icon-btn {
     width: 38px; height: 38px; border-radius: 50%; flex: none;
     display: grid; place-items: center; color: var(--fg);
@@ -111,13 +120,24 @@
           <img src="../../../assets/brand/logo-mark.svg" alt="" width="34" height="34">
           ANLUV.
         </a>
-        <div class="searchbox">
+        <div class="searchbox" data-od-id="buscador-topbar">
           <svg class="s-lupa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
           <input type="search" placeholder="Busca por texto, voz o foto…" aria-label="Buscar">
           <div class="search-actions">
-            <button class="icon-btn" type="button" aria-label="Buscar por voz">
+            <button class="icon-btn" type="button" aria-label="Búsqueda por voz" data-tab-voz>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
             </button>
+            <button class="icon-btn" type="button" aria-label="Búsqueda por foto" data-tab-foto>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+            </button>
+          </div>
+          <div class="search-panel" role="dialog" aria-label="Opciones de búsqueda">
+            <div class="search-tabs" role="tablist">
+              <button class="search-tab active" data-modo="texto" role="tab">Texto</button>
+              <button class="search-tab" data-modo="foto" role="tab">Foto</button>
+              <button class="search-tab" data-modo="voz" role="tab">Voz</button>
+            </div>
+            <p style="font:400 13px/1.5 var(--font-body); color:var(--muted); padding:6px 4px 2px">Buscador multimodal con IA: interpreta texto, voz e imagen. Guía completa en <a href="buscador-ia.html" style="color:var(--accent)">07 · Buscador con IA</a>.</p>
           </div>
         </div>
         <button class="icon-btn cart-btn" type="button" aria-label="Abrir carrito">
@@ -164,5 +184,22 @@
     </div>
   </section>
 </div>
+<script>
+(function () {
+  const root = document.querySelector('[data-od-id="buscador-topbar"]');
+  if (!root) return;
+  const input = root.querySelector('input[type="search"]');
+  const panel = root.querySelector('.search-panel');
+  const tabs = Array.from(root.querySelectorAll('.search-tab'));
+  input.addEventListener('focus', () => panel.classList.add('open'));
+  document.addEventListener('click', e => { if (!root.contains(e.target)) panel.classList.remove('open'); });
+  const activar = modo => tabs.forEach(t => t.classList.toggle('active', t.dataset.modo === modo));
+  tabs.forEach(t => t.addEventListener('click', () => activar(t.dataset.modo)));
+  const bv = root.querySelector('[data-tab-voz]');
+  const bf = root.querySelector('[data-tab-foto]');
+  if (bv) bv.addEventListener('click', () => { panel.classList.add('open'); activar('voz'); });
+  if (bf) bf.addEventListener('click', () => { panel.classList.add('open'); activar('foto'); });
+})();
+</script>
 </body>
 </html>

@@ -96,6 +96,47 @@
     <div class="searchbox-wrap searchbox" data-od-id="buscador-movil">
       <svg class="s-lupa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input type="search" placeholder="Buscar en ANLUV…" aria-label="Buscar productos">
+      <div class="search-actions">
+        <button class="icon-btn" type="button" aria-label="Búsqueda por voz" data-tab-voz>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+        </button>
+        <button class="icon-btn" type="button" aria-label="Búsqueda por foto" data-tab-foto>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+      </div>
+      <!-- Panel multimodal -->
+      <div class="search-panel" role="dialog" aria-label="Opciones de búsqueda">
+        <div class="search-tabs" role="tablist">
+          <button class="search-tab active" data-modo="texto" role="tab">Texto</button>
+          <button class="search-tab" data-modo="foto" role="tab">Foto</button>
+          <button class="search-tab" data-modo="voz" role="tab">Voz</button>
+        </div>
+        <div class="search-modo" data-modo="texto">
+          <ul class="suggest-list"></ul>
+        </div>
+        <div class="search-modo" data-modo="foto" style="display:none">
+          <div class="dropzone">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            <p><b>Arrastra una foto del producto</b> o toca para elegirla</p>
+            <p class="dropzone-estado" style="font-size:12.5px">La IA la identifica y te muestra productos parecidos.</p>
+            <input type="file" accept="image/*" class="sr-only" aria-label="Elegir foto">
+          </div>
+          <div style="margin-top:10px; text-align:center">
+            <button type="button" class="btn btn-ghost btn-sm foto-wa">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.96L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Z"/></svg>
+              Mejor, se la envío por WhatsApp
+            </button>
+          </div>
+        </div>
+        <div class="search-modo" data-modo="voz" style="display:none">
+          <div class="voice-box">
+            <button type="button" class="voice-mic" aria-label="Iniciar búsqueda por voz">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+            </button>
+            <p class="voice-hint">Toca el micrófono y dinos qué necesitas, por ejemplo: «una laptop para estudiar que no pase de dos mil soles».</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
