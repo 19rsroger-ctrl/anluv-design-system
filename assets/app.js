@@ -49,6 +49,12 @@
     if (moneda === 'USD') return '$ ' + fmt.format(soles / A.tipoCambio);
     return 'S/ ' + fmt.format(soles);
   }
+  /* Precio dual para tarjetas: soles resaltado + referencia en dólares (es-PE).
+     Devuelve HTML; el <span class="precio-alt"> se muestra pequeño bajo el precio. */
+  function precioDual(soles, nota) {
+    const alt = '$ ' + fmt.format(soles / A.tipoCambio) + (nota ? ' · ' + nota : '');
+    return 'S/ ' + fmt.format(soles) + '<span class="precio-alt">' + alt + '</span>';
+  }
   function simbolo() { return moneda === 'USD' ? '$' : 'S/'; }
   function setMoneda(m) {
     moneda = m;
@@ -544,7 +550,7 @@
 
   /* ---------- Utilidades exportadas ---------- */
   window.Anluv = {
-    precio, simbolo, toast, waLink, I,
+    precio, precioDual, simbolo, toast, waLink, I,
     setMoneda,
     get moneda() { return moneda; },
   };
