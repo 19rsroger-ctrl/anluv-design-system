@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navegación — ANLUV UI Kit</title>
+<link rel="stylesheet" href="anluv-tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 48px 20px 100px; }
+  .wrap { width: min(980px, 100%); margin-inline: auto; display: grid; gap: 40px; }
+  header { display: grid; gap: 12px; max-width: 640px; }
+  header h1 { font-size: clamp(28px, 4vw, 40px); }
+  header p { color: var(--muted); }
+  section > h2 { font-size: 20px; margin-bottom: 14px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-1); display: grid; gap: 14px; align-content: start; }
+  .panel > small { color: var(--muted); font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; font-weight: 600; }
+  nav.volver a { color: var(--accent); font-size: 14px; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+
+  /* — Extraído de assets/anluv.css — */
+  .logo { display: flex; align-items: center; gap: 10px; font: 600 21px/1 var(--font-display); letter-spacing: -0.01em; }
+  .logo img { width: 34px; height: 34px; }
+  .searchbox { position: relative; flex: 1; max-width: 520px; display: flex; align-items: center; }
+  .searchbox .s-lupa { position: absolute; left: 15px; color: var(--muted); pointer-events: none; }
+  .searchbox input {
+    width: 100%; height: 46px; padding: 0 52px 0 42px;
+    border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface); outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .searchbox input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .search-actions { position: absolute; right: 6px; display: flex; gap: 4px; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; color: var(--fg);
+    border: 1px solid var(--border); background: var(--surface);
+    transition: background .18s, border-color .18s;
+  }
+  .icon-btn:hover { background: var(--surface-2); }
+  .cart-btn { position: relative; }
+  .cart-count {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 999px; background: var(--accent); color: var(--accent-ink);
+    font: 600 11px/18px var(--font-body); text-align: center;
+  }
+  .topbar-demo {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 18px; box-shadow: var(--shadow-1);
+  }
+
+  .magic-nav {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 2px;
+    background: color-mix(in oklch, var(--primary-strong) 88%, transparent);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid oklch(1 0 0 / 0.10);
+    border-radius: 999px; padding: 6px;
+    box-shadow: 0 14px 40px oklch(0.15 0.04 245 / 0.45);
+  }
+  .magic-nav .indicador {
+    position: absolute; top: 6px; bottom: 6px; left: 6px; width: 96px;
+    border-radius: 999px; background: var(--accent);
+    box-shadow: 0 0 18px oklch(0.66 0.11 215 / 0.65);
+    transition: left .35s cubic-bezier(.65,0,.35,1), width .35s cubic-bezier(.65,0,.35,1);
+  }
+  .magic-nav a {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 7px;
+    height: 44px; padding: 0 16px; border-radius: 999px;
+    color: oklch(0.80 0.03 230);
+    font: 550 13.5px/1 var(--font-body); letter-spacing: .02em;
+    transition: color .25s; white-space: nowrap;
+  }
+  .magic-nav a svg { width: 17px; height: 17px; }
+  .magic-nav a.activo { color: oklch(0.98 0.01 220); }
+  html[data-theme='dark'] .magic-nav a.activo { color: oklch(0.16 0.03 240); }
+
+  .miga { font-size: 13.5px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+  .miga a:hover { color: var(--accent); }
+
+  .chip-activo {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--fg);
+    font: 550 13.5px/1 var(--font-body);
+  }
+  .chip-activo button { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); }
+  .chip-activo button:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="volver"><a href="index.html">← UI Kit</a></nav>
+  <header>
+    <span class="eyebrow">05 · Navegación</span>
+    <h1>Topbar con buscador y magic nav</h1>
+    <p>La magic nav es fija y centrada en el proyecto real (<code>position: fixed; bottom: 18px</code>); aquí se muestra en flujo para copiar su estructura. El indicador turquesa se mueve con scroll-spy en <code>assets/app.js</code>.</p>
+  </header>
+
+  <section data-od-id="kit-topbar">
+    <h2>Topbar</h2>
+    <div class="panel">
+      <small>.topbar — logo + searchbox + acciones</small>
+      <div class="topbar-demo">
+        <a class="logo" href="#">
+          <img src="../../assets/brand/logo-mark.svg" alt="" width="34" height="34">
+          ANLUV.
+        </a>
+        <div class="searchbox">
+          <svg class="s-lupa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" placeholder="Busca por texto, voz o foto…" aria-label="Buscar">
+          <div class="search-actions">
+            <button class="icon-btn" type="button" aria-label="Buscar por voz">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="icon-btn cart-btn" type="button" aria-label="Abrir carrito">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.6L20 7H6"/></svg>
+          <span class="cart-count">3</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section data-od-id="kit-magic-nav">
+    <h2>Magic nav (móvil, fija abajo)</h2>
+    <div class="panel">
+      <small>.magic-nav con .indicador animado</small>
+      <nav class="magic-nav" aria-label="Navegación principal">
+        <span class="indicador" aria-hidden="true"></span>
+        <a href="#" class="activo" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          <span>Inicio</span>
+        </a>
+        <a href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>
+          <span>Licencias</span>
+        </a>
+        <a href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Catálogo</span>
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  <section data-od-id="kit-migas">
+    <h2>Migas y chips</h2>
+    <div class="panel">
+      <small>.miga (ficha de producto)</small>
+      <nav class="miga" aria-label="Miga de pan">
+        <a href="#">Inicio</a><span aria-hidden="true">/</span>
+        <a href="#">Laptops</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Laptop Air 14" · Ryzen 5</span>
+      </nav>
+      <small>.chip-activo (filtro de búsqueda)</small>
+      <span class="chip-activo">Resultados para «laptop» <button type="button" aria-label="Quitar filtro"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>
+    </div>
+  </section>
+</div>
+</body>
+</html>

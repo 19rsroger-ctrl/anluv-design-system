@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "source-examples/estados-vacios.html",
+  "entry": "source-examples/estados-vacios.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-29T06:41:33.082Z",
+  "updatedAt": "2026-07-29T06:41:33.082Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

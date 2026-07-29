@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<title>ANLUV — Source example: compra rápida (2 pasos)</title>
+<!--
+  Ejemplo de alta señal extraído de index.html / producto.html
+  (drawer #drawer-quickbuy + lógica `AnluvQuickBuy` en assets/app.js).
+  Patrón: drawer lateral de 2 pantallas con validación DNI/RUC,
+  selector de comprobante SUNAT y datos de pago copiables.
+  Estilos reales: ../assets/anluv.css
+-->
+<link rel="stylesheet" href="../assets/anluv.css">
+<style>
+  body { padding: 40px 20px; }
+  h1 { font-size: 20px; margin-bottom: 6px; }
+  .nota { color: var(--muted); font-size: 13.5px; margin-bottom: 24px; max-width: 62ch; }
+  /* En este extracto el drawer se muestra en flujo, no fijo */
+  .drawer.demo {
+    position: static; transform: none; width: min(520px, 100%);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    margin-inline: auto; max-height: none;
+  }
+</style>
+</head>
+<body>
+  <h1>Compra rápida (.qb) — 2 pasos</h1>
+  <p class="nota">Paso 1: documento (DNI 8 / RUC 11 con validación en línea) + comprobante. Paso 2: pago con datos copiables (Plin/Yape, Interbank PEN/USD) y confirmación por WhatsApp.</p>
+
+  <aside class="drawer qb demo" data-od-id="quickbuy-demo">
+    <div class="drawer-head">
+      <div>
+        <h3>Compra rápida</h3>
+        <div class="qb-pasos" style="margin-top:10px; width:180px"><i class="on"></i><i></i></div>
+      </div>
+      <button class="icon-btn" type="button" aria-label="Cerrar compra rápida">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="qb-body qb-screen sel" data-paso="1">
+      <div class="qb-resumen">
+        <div class="cart-item">
+          <img src="../assets/teclado-mecanico.jpg" alt="Teclado mecánico 75 por ciento" loading="lazy">
+          <div><h4>Teclado Mecánico 75% · Switch Marrón · Español</h4><div class="ci-precio">1 × S/ 219.00</div></div>
+        </div>
+        <div class="totales"><div class="fila"><span>Total a pagar (IGV incluido)</span><b class="precio">S/ 219.00</b></div></div>
+      </div>
+      <div class="campo">
+        <label for="qb-doc-demo">Tu DNI o RUC</label>
+        <input id="qb-doc-demo" inputmode="numeric" autocomplete="off" placeholder="DNI: 8 dígitos · RUC: 11 dígitos">
+        <span class="error">Ingresa un DNI (8 dígitos) o RUC (11 dígitos) válido.</span>
+      </div>
+      <div class="campo">
+        <label>¿Qué comprobante deseas?</label>
+        <div class="comprobante-ops">
+          <button type="button" class="sel">Boleta</button>
+          <button type="button">Factura</button>
+          <button type="button">Nota de Venta</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-foot qb-screen sel" data-paso="1">
+      <button class="btn btn-accent btn-block" type="button">Continuar al pago</button>
+    </div>
+  </aside>
+
+  <div style="height:28px"></div>
+
+  <aside class="drawer qb demo" data-od-id="quickbuy-demo-p2">
+    <div class="drawer-head">
+      <div>
+        <h3>Compra rápida</h3>
+        <div class="qb-pasos" style="margin-top:10px; width:180px"><i class="on"></i><i class="on"></i></div>
+      </div>
+    </div>
+    <div class="qb-body qb-screen sel" data-paso="2">
+      <p class="qb-intro">Transfiere o yapea el total y envíanos tu comprobante. En cuanto lo recibamos, preparamos tu pedido y emitimos tu comprobante SUNAT.</p>
+      <div class="copiables">
+        <div class="copiable">
+          <div><span class="c-label">Plin / Yape</span><div class="c-valor">+51 906 186 548</div></div>
+          <button class="copiar-btn" type="button"><span>Copiar</span></button>
+        </div>
+        <div class="copiable">
+          <div><span class="c-label">Cuenta Simple Soles · Interbank</span><div class="c-valor">898 3255748345</div></div>
+          <button class="copiar-btn" type="button"><span>Copiar</span></button>
+        </div>
+        <div class="copiable">
+          <div><span class="c-label">CCI Soles · Interbank</span><div class="c-valor">003 898 013255748345 41</div></div>
+          <button class="copiar-btn" type="button"><span>Copiar</span></button>
+        </div>
+      </div>
+      <button class="btn btn-wa btn-block" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.96L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Z"/></svg>
+        Confirmar compra por WhatsApp
+      </button>
+      <button class="btn btn-ghost btn-block" type="button">Volver a mis datos</button>
+    </div>
+  </aside>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<title>ANLUV — Source example: estados vacíos honestos</title>
+<!--
+  Ejemplo de alta señal extraído de index.html, producto.html y assets/app.js.
+  Regla de marca: honestidad absoluta — cero reseñas inventadas,
+  cero métricas falsas; los estados vacíos se diseñan con orgullo
+  y siempre ofrecen una salida humana (WhatsApp).
+  Estilos reales: ../assets/anluv.css
+-->
+<link rel="stylesheet" href="../assets/anluv.css">
+<style>
+  body { padding: 40px 20px; display: grid; gap: 32px; }
+  h1 { font-size: 20px; }
+  .nota { color: var(--muted); font-size: 13.5px; max-width: 62ch; }
+  .wrap-demo { max-width: 860px; margin-inline: auto; width: 100%; }
+  .vacio { display: grid; }
+</style>
+</head>
+<body>
+  <div class="wrap-demo">
+    <h1>Estados vacíos (.vacio · .opiniones-vacias · .cart-vacio)</h1>
+    <p class="nota">Tres variantes del mismo principio: decir la verdad con calma y ofrecer ayuda humana inmediata.</p>
+  </div>
+
+  <!-- Sin resultados de búsqueda -->
+  <div class="wrap-demo">
+    <div class="vacio show" data-od-id="vacio-demo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M8 11h6"/></svg>
+      <h3>No encontramos exactamente lo que buscas</h3>
+      <p>Pero podemos ayudarte. Escríbenos por WhatsApp y lo cotizamos especialmente para ti, sin compromiso.</p>
+      <a class="btn btn-wa" href="#" onclick="return false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.96L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Z"/></svg>
+        Cotizar por WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- Opiniones sin reseñas (honestidad ante todo) -->
+  <div class="wrap-demo">
+    <div class="opiniones-vacias" data-od-id="opiniones-vacias-demo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg>
+      <h4>Aquí no hay reseñas inventadas</h4>
+      <p>Este espacio se llena solo con opiniones de clientes que compraron de verdad y lo confirmamos con su pedido. Si tú ya compraste este producto, la primera reseña puede ser la tuya.</p>
+    </div>
+  </div>
+
+  <!-- Carrito vacío (metáfora marina) -->
+  <div class="wrap-demo">
+    <div class="cart-vacio" data-od-id="cart-vacio-demo" style="border:1px solid var(--border); border-radius: var(--radius); background: var(--surface)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6"/></svg>
+      <p><b>Tu carrito está tranquilo, como el mar en calma.</b><br>Cuando encuentres tu herramienta exacta, la guardamos aquí.</p>
+    </div>
+  </div>
+</body>
+</html>

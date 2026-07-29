@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estados vacíos y confianza — ANLUV UI Kit</title>
+<link rel="stylesheet" href="../../../colors_and_type.css">
+<link rel="stylesheet" href="../anluv-tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 48px 20px 100px; }
+  .wrap { width: min(980px, 100%); margin-inline: auto; display: grid; gap: 40px; }
+  header { display: grid; gap: 12px; max-width: 640px; }
+  header h1 { font-size: clamp(28px, 4vw, 40px); }
+  header p { color: var(--muted); }
+  section > h2 { font-size: 20px; margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; align-items: start; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-1); display: grid; gap: 14px; align-content: start; }
+  .panel > small { color: var(--muted); font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; font-weight: 600; }
+  nav.volver a { color: var(--accent); font-size: 14px; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+
+  /* — Extraído de assets/anluv.css — */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    min-height: 48px; padding: 0 24px; border-radius: 999px;
+    font: 560 15px/1 var(--font-body); letter-spacing: .02em;
+    transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+    border: 1.5px solid transparent; white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn-accent { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-cta); }
+  .btn-accent:hover { filter: brightness(1.06); }
+  .btn-ghost { border-color: var(--border); background: var(--surface); color: var(--fg); }
+  .btn-ghost:hover { border-color: var(--muted); }
+
+  .vacio { text-align: center; padding: 56px 20px; display: grid; gap: 14px; justify-items: center; background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); }
+  .vacio svg { width: 44px; height: 44px; color: var(--muted); }
+  .vacio h3 { font-size: 21px; }
+  .vacio p { color: var(--muted); max-width: 46ch; }
+
+  .opiniones-vacias { text-align: center; padding: 40px 24px; border: 1px dashed var(--border); border-radius: var(--radius); display: grid; gap: 12px; justify-items: center; }
+  .opiniones-vacias svg { width: 40px; height: 40px; color: var(--muted); }
+  .opiniones-vacias h4 { font-size: 19px; }
+  .opiniones-vacias p { color: var(--muted); max-width: 48ch; font-size: 14.5px; }
+
+  .garantia-nota { font-size: 13.5px; line-height: 1.6; color: var(--fg); display: flex; gap: 11px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px 16px; box-shadow: var(--shadow-1); }
+  .garantia-nota svg { width: 20px; height: 20px; flex: none; margin-top: 1px; color: var(--success); }
+  .garantia-nota b { display: block; font-weight: 600; margin-bottom: 2px; }
+  .garantia-nota .nota-txt { color: var(--muted); }
+
+  .confianza-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; display: grid; gap: 10px; align-content: start; box-shadow: var(--shadow-1); }
+  .confianza-card svg { width: 26px; height: 26px; color: var(--primary); }
+  html[data-theme='dark'] .confianza-card svg { color: var(--accent); }
+  .confianza-card h3 { font-size: 17.5px; }
+  .confianza-card p { font-size: 14px; color: var(--muted); }
+
+  .pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: paso; }
+  @media (max-width: 760px) { .pasos { grid-template-columns: 1fr; } }
+  .paso { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; display: grid; gap: 10px; align-content: start; }
+  .paso::before {
+    counter-increment: paso; content: counter(paso, decimal-leading-zero);
+    font: 600 40px/1 var(--font-display); letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .paso h3 { font-size: 18px; }
+  .paso p { font-size: 14.5px; color: var(--muted); }
+
+  .toast {
+    background: var(--primary-strong); color: oklch(0.95 0.02 230);
+    border: 1px solid oklch(1 0 0 / 0.12);
+    padding: 12px 20px; border-radius: 999px;
+    font: 550 14px/1 var(--font-body);
+    box-shadow: var(--shadow-2);
+    display: inline-flex; align-items: center; gap: 9px;
+    max-width: 92vw;
+  }
+  .toast svg { width: 16px; height: 16px; color: var(--accent); flex: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="volver"><a href="index.html">← UI Kit</a></nav>
+  <header>
+    <span class="eyebrow">04 · Estados vacíos y confianza</span>
+    <h1>Honestidad radical, incluso en el vacío</h1>
+    <p>Sin reseñas, métricas ni stock inventados. El vacío se redacta con orgullo y la confianza se declara por escrito.</p>
+  </header>
+
+  <section data-od-id="kit-vacios">
+    <h2>Vacíos</h2>
+    <div class="grid2">
+      <div class="panel">
+        <small>.vacio (sin resultados de búsqueda)</small>
+        <div class="vacio" style="display:grid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M8 11h6"/></svg>
+          <h3>No encontramos «impresora 3D»</h3>
+          <p>Pero el mar es grande. Prueba con otra palabra o cuéntanos qué necesitas y lo buscamos por ti.</p>
+          <button class="btn btn-accent" type="button">Pedirlo por WhatsApp</button>
+        </div>
+      </div>
+      <div class="panel">
+        <small>.opiniones-vacias (sin reseñas inventadas)</small>
+        <div class="opiniones-vacias">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
+          <h4>Aún no hay opiniones</h4>
+          <p>Este producto es nuevo en el catálogo. Cuando alguien lo compre y lo use, su opinión real aparecerá aquí — ni antes, ni inventada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-od-id="kit-confianza">
+    <h2>Confianza declarada</h2>
+    <div class="grid2">
+      <div class="panel">
+        <small>.garantia-nota (ficha de producto)</small>
+        <div class="garantia-nota">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div><b>Garantía Hésed, por escrito</b><span class="nota-txt">Si este equipo no es el adecuado para ti, te lo decimos antes de que pagues. Preferimos perder una venta a perderte a ti.</span></div>
+        </div>
+        <small>.toast (confirmación, en flujo para la demo)</small>
+        <div class="toast">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span>Añadido a tu carrito</span>
+        </div>
+      </div>
+      <div class="panel">
+        <small>.confianza-card</small>
+        <div class="confianza-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>
+          <h3>Garantía escrita</h3>
+          <p>Cada producto sale con su garantía por escrito: qué cubre, cuánto dura y cómo usarla.</p>
+        </div>
+        <div class="confianza-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <h3>Respuesta en horas, no en días</h3>
+          <p>WhatsApp directo con quien conoce el producto. Sin bots que te marean.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-od-id="kit-pasos">
+    <h2>Cómo comprar (.pasos)</h2>
+    <div class="pasos">
+      <div class="paso">
+        <h3>Elige con calma</h3>
+        <p>Cada tarjeta te dice exactamente qué es, en qué estado está y cómo te llega. Sin letra chica.</p>
+      </div>
+      <div class="paso">
+        <h3>Compra en dos pasos</h3>
+        <p>Tus datos, tu comprobante y listo. Pagas por Plin, Yape o transferencia Interbank.</p>
+      </div>
+      <div class="paso">
+        <h3>Te acompañamos después</h3>
+        <p>Garantía escrita y WhatsApp directo. La venta no termina cuando pagas: empieza ahí.</p>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

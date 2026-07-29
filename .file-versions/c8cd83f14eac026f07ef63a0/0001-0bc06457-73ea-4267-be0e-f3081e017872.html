@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es-PE" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assets de marca — ANLUV Design System</title>
+<link rel="stylesheet" href="../assets/anluv.css">
+<style>
+  body { padding: 48px 20px 120px; }
+  .pv-wrap { width: min(980px, 100%); margin-inline: auto; display: grid; gap: 40px; }
+  .pv-head { display: grid; gap: 12px; max-width: 640px; }
+  .pv-head h1 { font-size: clamp(28px, 4vw, 40px); }
+  .pv-head p { color: var(--muted); }
+  .pv-sec > h2 { font-size: 20px; margin-bottom: 14px; }
+  .pv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .pv-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-1); display: grid; gap: 12px; justify-items: center; text-align: center; align-content: start; }
+  .pv-panel small { color: var(--muted); font-size: 12.5px; }
+  .pv-panel b { font-size: 14px; }
+  .pv-nav a { color: var(--accent); font-size: 14px; }
+  .dark-panel { background: oklch(0.22 0.04 245); border-color: transparent; }
+  .dark-panel small { color: oklch(0.75 0.03 230); }
+  .img-full { width: 100%; border-radius: 12px; aspect-ratio: 4 / 3; object-fit: cover; }
+  .wordmark { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; font-size: 34px; color: var(--primary); }
+  .wordmark small { display: block; font-size: 12px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="pv-wrap">
+  <div class="pv-nav"><a href="index.html">← Todas las tarjetas</a></div>
+  <header class="pv-head">
+    <span class="eyebrow">06 · Assets de marca</span>
+    <h1>Logo, favicon e imágenes reales del catálogo</h1>
+    <p>Todos los archivos viven en <code>assets/</code> y <code>assets/brand/</code>. Nada aquí es un placeholder: es el material de producción del proyecto fuente.</p>
+  </header>
+
+  <section class="pv-sec">
+    <h2>Marca</h2>
+    <div class="pv-grid">
+      <div class="pv-panel">
+        <img src="../assets/brand/logo-mark.svg" alt="Isotipo ANLUV" width="72" height="72">
+        <b>logo-mark.svg</b><small>isotipo · SVG vectorial · hereda <code>currentColor</code> donde aplica</small>
+      </div>
+      <div class="pv-panel">
+        <img src="../assets/brand/favicon.svg" alt="Favicon ANLUV" width="48" height="48">
+        <b>favicon.svg</b><small>favicon · se enlaza con <code>rel="icon" type="image/svg+xml"</code></small>
+      </div>
+      <div class="pv-panel">
+        <span class="wordmark">ANLUV<small>Tech Store</small></span>
+        <b>Wordmark</b><small>Clash Display 600 · tracking −0.02em · color <code>--primary</code></small>
+      </div>
+      <div class="pv-panel dark-panel">
+        <img src="../assets/brand/logo-mark.svg" alt="Isotipo ANLUV sobre fondo oscuro" width="72" height="72">
+        <b style="color:oklch(0.9 0.02 230)">Sobre oscuro</b><small>el acento turquesa mantiene contraste AA sobre <code>#0d1b2a</code></small>
+      </div>
+    </div>
+  </section>
+
+  <section class="pv-sec">
+    <h2>Imágenes de producto</h2>
+    <div class="pv-grid">
+      <div class="pv-panel"><img class="img-full" src="../assets/laptop-plateada.jpg" alt="Laptop Air 14 plateada" loading="lazy"><b>laptop-plateada.jpg</b><small>tarjeta héroe del catálogo</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/audifonos.jpg" alt="Audífonos over-ear" loading="lazy"><b>audifonos.jpg</b><small>tarjeta catálogo</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/teclado-mecanico.jpg" alt="Teclado mecánico 75%" loading="lazy"><b>teclado-mecanico.jpg</b><small>tarjeta catálogo</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/mouse-inalambrico.jpg" alt="Mouse inalámbrico" loading="lazy"><b>mouse-inalambrico.jpg</b><small>item de carrito</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/laptop-gamer.jpg" alt="Laptop gamer" loading="lazy"><b>laptop-gamer.jpg</b><small>tarjeta catálogo</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/ssd-nvme.jpg" alt="SSD NVMe" loading="lazy"><b>ssd-nvme.jpg</b><small>tarjeta catálogo</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/parlante.jpg" alt="Parlante bluetooth" loading="lazy"><b>parlante.jpg</b><small>tarjeta reacondicionado</small></div>
+      <div class="pv-panel"><img class="img-full" src="../assets/hero-oceano.jpg" alt="Mar en calma al amanecer" loading="lazy"><b>hero-oceano.jpg</b><small>fondo del hero home</small></div>
+    </div>
+  </section>
+
+  <section class="pv-sec">
+    <h2>Reglas de uso</h2>
+    <div class="pv-panel" style="justify-items:start; text-align:left">
+      <b>Uso de imágenes</b>
+      <small style="text-transform:none; letter-spacing:0; font-size:14px; color:var(--text); line-height:1.6">
+        · Fotografía honesta del producto real — nunca stock genérico que no corresponda a lo que se entrega.<br>
+        · Las licencias digitales no usan foto: usan el marco de gradiente (<code>lic-card</code>) con inicial del producto.<br>
+        · El isotipo no se deforma, no se re-colorea fuera de primario/acento/blanco y mantiene zona de respeto de 1× su ancho.
+      </small>
+    </div>
+  </section>
+</div>
+</body>
+</html>

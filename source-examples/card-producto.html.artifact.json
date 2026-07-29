@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "source-examples/card-producto.html",
+  "entry": "source-examples/card-producto.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-07-29T06:39:31.039Z",
+  "updatedAt": "2026-07-29T06:39:31.039Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

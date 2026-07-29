@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANLUV Design System — Previews</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 48px 20px 80px; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(980px, 100%); margin-inline: auto; display: grid; gap: 14px; }
+  header { margin-bottom: 26px; display: grid; gap: 12px; max-width: 640px; }
+  h1 { font-size: clamp(30px, 4.5vw, 44px); }
+  header p { color: var(--muted); font-size: 16.5px; line-height: 1.6; }
+  .card {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 24px;
+    box-shadow: var(--shadow-1);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
+  .num {
+    font: 600 22px/1 var(--font-display); letter-spacing: -0.02em;
+    color: var(--accent); width: 44px; height: 44px; border-radius: 12px;
+    background: var(--accent-soft); display: grid; place-items: center;
+  }
+  .card h2 { font-size: 18.5px; margin-bottom: 4px; }
+  .card p { color: var(--muted); font-size: 14px; }
+  .card svg { color: var(--muted); }
+  footer { margin-top: 34px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">ANLUV · Design System</span>
+      <h1>Tarjetas de revisión</h1>
+      <p>Siete vistas enfocadas del sistema «calma oceánica premium». Cada tarjeta carga los archivos preservados del proyecto fuente: tokens, fotografía, marca y componentes reales.</p>
+    </header>
+
+    <a class="card" href="colors-primary.html" data-od-id="pv-colors">
+      <span class="num">01</span>
+      <div><h2>Colores primarios</h2><p>Paleta OKLch claro/oscuro, semánticos, condiciones y el gradiente digital.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="typography-specimens.html" data-od-id="pv-typography">
+      <span class="num">02</span>
+      <div><h2>Especímenes tipográficos</h2><p>Clash Display editorial + General Sans neutra; escala y tracking observados.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="spacing-tokens.html" data-od-id="pv-spacing">
+      <span class="num">03</span>
+      <div><h2>Tokens de espaciado</h2><p>Escala 4→96 px derivada del código, contenedor y pósters.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="radius-shadows.html" data-od-id="pv-radius">
+      <span class="num">04</span>
+      <div><h2>Radios y sombras</h2><p>Píldora vs. 18 px; sombras con tinte oceánico y la sombra CTA turquesa.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="components-buttons.html" data-od-id="pv-components">
+      <span class="num">05</span>
+      <div><h2>Componentes · botones</h2><p>Botones, badges, tarjetas, formularios, toast y magic nav con estilos reales.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="brand-assets.html" data-od-id="pv-brand">
+      <span class="num">06</span>
+      <div><h2>Assets de marca</h2><p>Logo SVG, favicon y la fotografía real de producto preservada.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+    <a class="card" href="surfaces.html" data-od-id="pv-surfaces">
+      <span class="num">07</span>
+      <div><h2>Superficies aplicadas</h2><p>Las pantallas originales del proyecto: home/catálogo y ficha de producto.</p></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </a>
+
+    <footer>
+      Tokens: <code>colors_and_type.css</code> · Documento canónico: <code>DESIGN.md</code> · Kit aplicado: <code>ui_kits/app/</code>
+    </footer>
+  </div>
+</body>
+</html>

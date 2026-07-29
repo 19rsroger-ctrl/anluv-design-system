@@ -1,0 +1,5 @@
+# Capturas de contexto del plugin (no forman parte del paquete)
+plugin-source/
+
+# Sistema
+.DS_Store

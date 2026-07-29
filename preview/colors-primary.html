@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colores primarios — ANLUV Design System</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 48px 20px 80px; }
+  .wrap { width: min(1080px, 100%); margin-inline: auto; display: grid; gap: 34px; }
+  header { display: grid; gap: 12px; max-width: 640px; }
+  h1 { font-size: clamp(28px, 4vw, 40px); }
+  header p { color: var(--muted); }
+  h2 { font-size: 20px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+  .sw {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: var(--surface); box-shadow: var(--shadow-1);
+  }
+  .sw i { display: block; height: 84px; }
+  .sw div { padding: 12px 14px; display: grid; gap: 2px; }
+  .sw b { font: 560 13.5px/1.3 var(--font-body); }
+  .sw code { font-size: 11.5px; color: var(--muted); }
+  .sw span { font-size: 12px; color: var(--muted); }
+  .dark {
+    background: oklch(0.21 0.035 245); color: oklch(0.94 0.01 230);
+    border-radius: var(--radius); padding: 24px;
+  }
+  .dark h2 { color: oklch(0.94 0.01 230); }
+  .dark .sw { background: oklch(0.25 0.04 243); border-color: oklch(1 0 0 / 0.09); }
+  .dark .sw code, .dark .sw span { color: oklch(0.72 0.025 232); }
+  .grad { height: 84px; background: var(--digital-grad); }
+  nav a { color: var(--accent); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="index.html">← Todas las tarjetas</a></nav>
+  <header>
+    <span class="eyebrow">01 · Colores</span>
+    <h1>Calma oceánica en OKLch</h1>
+    <p>Neutrales dominan (60-30-10); el turquesa aparece máximo 2 veces por pantalla. Valores exactos de <code>assets/anluv.css</code>.</p>
+  </header>
+
+  <section>
+    <h2>Tema claro (Foam White)</h2>
+    <div class="grid">
+      <div class="sw"><i style="background:var(--bg)"></i><div><b>--bg</b><code>oklch(0.977 0.004 236)</code><span>Fondo · ≈ #F8F9FA</span></div></div>
+      <div class="sw"><i style="background:var(--surface)"></i><div><b>--surface</b><code>oklch(1 0 0)</code><span>Tarjetas · ≈ #FFFFFF</span></div></div>
+      <div class="sw"><i style="background:var(--surface-2)"></i><div><b>--surface-2</b><code>oklch(0.955 0.008 230)</code><span>Rellenos · ≈ #EEF3F7</span></div></div>
+      <div class="sw"><i style="background:var(--fg)"></i><div><b>--fg</b><code>oklch(0.25 0.045 240)</code><span>Texto · ≈ #0D1B2A</span></div></div>
+      <div class="sw"><i style="background:var(--muted)"></i><div><b>--muted</b><code>oklch(0.52 0.03 230)</code><span>Secundario · ≈ #51667A</span></div></div>
+      <div class="sw"><i style="background:var(--border)"></i><div><b>--border</b><code>oklch(0.91 0.01 230)</code><span>Bordes · ≈ #DDE6EE</span></div></div>
+      <div class="sw"><i style="background:var(--accent)"></i><div><b>--accent</b><code>oklch(0.66 0.11 215)</code><span>Turquesa · ≈ #17A2B8</span></div></div>
+      <div class="sw"><i style="background:var(--accent-soft)"></i><div><b>--accent-soft</b><code>oklch(0.94 0.035 215)</code><span>Suave / foco</span></div></div>
+      <div class="sw"><i style="background:var(--primary)"></i><div><b>--primary</b><code>oklch(0.40 0.07 240)</code><span>Deep Ocean · ≈ #1B4F72</span></div></div>
+      <div class="sw"><i style="background:var(--primary-strong)"></i><div><b>--primary-strong</b><code>oklch(0.32 0.06 245)</code><span>Footer, filosofía</span></div></div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <h2>Tema oscuro (<code>html[data-theme='dark']</code>)</h2>
+    <div class="grid">
+      <div class="sw"><i style="background:oklch(0.21 0.035 245)"></i><div><b>--bg</b><code>oklch(0.21 0.035 245)</code><span>Fondo oscuro</span></div></div>
+      <div class="sw"><i style="background:oklch(0.25 0.04 243)"></i><div><b>--surface</b><code>oklch(0.25 0.04 243)</code><span>Tarjetas</span></div></div>
+      <div class="sw"><i style="background:oklch(0.94 0.01 230)"></i><div><b>--fg</b><code>oklch(0.94 0.01 230)</code><span>Texto</span></div></div>
+      <div class="sw"><i style="background:oklch(0.72 0.11 210)"></i><div><b>--accent</b><code>oklch(0.72 0.11 210)</code><span>Turquesa luminoso</span></div></div>
+      <div class="sw"><i style="background:oklch(0.62 0.08 235)"></i><div><b>--primary</b><code>oklch(0.62 0.08 235)</code><span>Primario aclarado</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Semánticos y condición de producto</h2>
+    <div class="grid">
+      <div class="sw"><i style="background:var(--success)"></i><div><b>--success</b><code>oklch(0.63 0.15 150)</code><span>Nuevo · IGV · copiado</span></div></div>
+      <div class="sw"><i style="background:var(--warning)"></i><div><b>--warning</b><code>oklch(0.80 0.15 85)</code><span>Usado · estrellas</span></div></div>
+      <div class="sw"><i style="background:var(--danger)"></i><div><b>--danger</b><code>oklch(0.58 0.16 25)</code><span>Errores · quitar</span></div></div>
+      <div class="sw"><i style="background:var(--violet)"></i><div><b>--violet</b><code>oklch(0.54 0.21 290)</code><span>Open Box</span></div></div>
+      <div class="sw"><i style="background:var(--wa)"></i><div><b>--wa</b><code>oklch(0.60 0.16 150)</code><span>Botón WhatsApp</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Gradiente digital — única excepción</h2>
+    <div class="grid">
+      <div class="sw"><i class="grad"></i><div><b>--digital-grad</b><code>120deg violeta → turquesa</code><span>Solo licencias digitales: marco de tarjeta, thumb, badge</span></div></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarjetas de producto — ANLUV UI Kit</title>
+<link rel="stylesheet" href="anluv-tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 48px 20px 100px; }
+  .wrap { width: min(1080px, 100%); margin-inline: auto; display: grid; gap: 40px; }
+  header { display: grid; gap: 12px; max-width: 640px; }
+  header h1 { font-size: clamp(28px, 4vw, 40px); }
+  header p { color: var(--muted); }
+  section > h2 { font-size: 20px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+  nav.volver a { color: var(--accent); font-size: 14px; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* — Extraído de assets/anluv.css: botones usados por las tarjetas — */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    min-height: 48px; padding: 0 24px; border-radius: 999px;
+    font: 560 15px/1 var(--font-body); letter-spacing: .02em;
+    transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+    border: 1.5px solid transparent; white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn-accent { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-cta); }
+  .btn-accent:hover { filter: brightness(1.06); }
+  .btn-primary { background: var(--primary); color: oklch(0.97 0.01 230); box-shadow: var(--shadow-1); }
+  html[data-theme='dark'] .btn-primary { background: oklch(0.50 0.09 240); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { border-color: var(--border); background: var(--surface); color: var(--fg); }
+  .btn-ghost:hover { border-color: var(--muted); }
+  .btn-sm { min-height: 40px; padding: 0 16px; font-size: 13.5px; }
+
+  /* — Extraído: badges — */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 11px; border-radius: 999px;
+    font: 600 11.5px/1 var(--font-body); letter-spacing: .05em; text-transform: uppercase;
+  }
+  .badge svg { width: 12px; height: 12px; }
+  .badge-digital { background: var(--digital-grad); color: #fff; }
+  .badge-tipo { background: oklch(0.25 0.04 240 / 0.82); color: #fff; backdrop-filter: blur(4px); }
+  .es-digital .badge-tipo { background: oklch(1 0 0 / 0.9); color: oklch(0.45 0.18 290); }
+
+  /* — Extraído: tarjeta de producto — */
+  .card {
+    position: relative; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: var(--shadow-1); transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-2); }
+  .card.es-digital { border: 1.5px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--digital-grad) border-box; }
+  .card-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-2); }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2,.6,.2,1); }
+  .card:hover .card-media img { transform: scale(1.06); }
+  .card-media.digital-art { display: grid; place-items: center; background: var(--digital-grad); }
+  .digital-art .circuito { position: absolute; inset: 0; opacity: .35; }
+  .digital-art .lic-logo { width: 64px; height: 64px; font-size: 24px; background: oklch(1 0 0 / 0.16); backdrop-filter: blur(4px); }
+  .card-badges { position: absolute; top: 12px; left: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .wish {
+    position: absolute; top: 10px; right: 10px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: oklch(1 0 0 / 0.92); color: oklch(0.40 0.05 240);
+    display: grid; place-items: center; box-shadow: var(--shadow-1);
+    transition: transform .15s, color .15s;
+  }
+  html[data-theme='dark'] .wish { background: oklch(0.22 0.04 245 / 0.9); color: oklch(0.85 0.02 230); }
+  .wish:hover { transform: scale(1.1); }
+  .wish.on { color: oklch(0.60 0.18 15); }
+  .wish.on svg { fill: currentColor; }
+  .card-cuerpo { padding: 16px; display: grid; gap: 10px; flex: 1; align-content: start; }
+  .card-cond { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+  .punto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .punto.nuevo { background: var(--success); }
+  .punto.reacondicionado { background: var(--accent); }
+  .punto.usado { background: var(--warning); }
+  .punto.openbox { background: var(--violet); }
+  .punto.repuestos { background: var(--muted); }
+  .card h3 { font-size: 16.5px; line-height: 1.3; letter-spacing: -0.01em; }
+  .card h3 a:hover { color: var(--accent); }
+  .card-envio { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .card-precio { display: flex; align-items: baseline; gap: 10px; }
+  .precio { font: 600 22px/1 var(--font-display); letter-spacing: -0.01em; }
+  .card-precio .precio { font-size: 21px; }
+  .precio small { display: block; font: 500 12.5px/1.3 var(--font-body); color: var(--muted); letter-spacing: 0; margin-top: 4px; }
+  .card-acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+  .card-acciones .btn { min-height: 42px; padding: 0 12px; font-size: 13.5px; }
+  .card .btn-buy { grid-column: 1 / -1; background: var(--accent); color: var(--accent-ink); min-height: 44px; font-weight: 600; }
+  .card .btn-buy:hover { filter: brightness(1.06); }
+
+  /* — Extraído: lic-card del rail de licencias — */
+  .lic-card {
+    border-radius: var(--radius); background: var(--digital-grad);
+    padding: 1.5px; box-shadow: var(--shadow-1);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .lic-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-2); }
+  .lic-inner { border-radius: calc(var(--radius) - 1.5px); background: var(--surface); padding: 22px; height: 100%; display: grid; gap: 14px; align-content: start; }
+  .lic-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .lic-logo {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--digital-grad); color: #fff;
+    display: grid; place-items: center; font: 700 17px/1 var(--font-display);
+  }
+  .lic-inner h3 { font-size: 20px; }
+  .lic-inner p { font-size: 14px; color: var(--muted); }
+  .lic-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+
+  /* — Extraído: confianza — */
+  .confianza-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; display: grid; gap: 10px; align-content: start; box-shadow: var(--shadow-1); }
+  .confianza-card svg { width: 26px; height: 26px; color: var(--primary); }
+  html[data-theme='dark'] .confianza-card svg { color: var(--accent); }
+  .confianza-card h3 { font-size: 17.5px; }
+  .confianza-card p { font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="volver"><a href="index.html">← UI Kit</a></nav>
+  <header>
+    <span class="eyebrow">02 · Tarjetas de producto</span>
+    <h1>Física con foto, digital con gradiente</h1>
+    <p>La foto honesta es para el hardware; las licencias digitales nunca llevan foto — llevan el marco de gradiente violeta→turquesa y la inicial del producto.</p>
+  </header>
+
+  <section data-od-id="kit-cards">
+    <h2>Catálogo (.grid-productos)</h2>
+    <div class="grid">
+      <article class="card" data-od-id="kit-card-laptop">
+        <div class="card-media"><img src="../../assets/laptop-plateada.jpg" alt="Laptop Air 14 pulgadas plateada" loading="lazy"></div>
+        <div class="card-badges">
+          <span class="badge badge-tipo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>Físico
+          </span>
+        </div>
+        <button class="wish" type="button" aria-label="Guardar en favoritos" aria-pressed="false">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21Z"/></svg>
+        </button>
+        <div class="card-cuerpo">
+          <div class="card-cond"><span class="punto nuevo"></span>Nuevo · Sellado de fábrica</div>
+          <h3><a href="#">Laptop Air 14" · Ryzen 5 · 16 GB · 512 GB SSD</a></h3>
+          <div class="card-envio">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3m10 0h2v-5l4-4h-6"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+            Envío a todo Lima
+          </div>
+          <div class="card-precio"><span class="precio">S/ 2,499.00</span></div>
+          <div class="card-acciones">
+            <a class="btn btn-ghost" href="#">Ver detalles</a>
+            <button class="btn btn-primary" type="button">Añadir</button>
+            <button class="btn btn-buy" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card es-digital" data-od-id="kit-card-windows">
+        <div class="card-media digital-art">
+          <svg class="circuito" viewBox="0 0 200 150" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"><path d="M20 30h40v30h40M20 120h50V80h60m-90-20v-20m140 50h-40v40m60-90h-30v50"/></svg>
+          <span class="lic-logo" aria-hidden="true">M</span>
+        </div>
+        <div class="card-badges">
+          <span class="badge badge-tipo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>Digital
+          </span>
+        </div>
+        <button class="wish" type="button" aria-label="Guardar en favoritos" aria-pressed="false">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21Z"/></svg>
+        </button>
+        <div class="card-cuerpo">
+          <h3><a href="#">Windows 11 Pro · Licencia Original Retail</a></h3>
+          <div class="card-envio">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>
+            Entrega inmediata
+          </div>
+          <div class="card-precio"><span class="precio">S/ 249.00</span></div>
+          <div class="card-acciones">
+            <a class="btn btn-ghost" href="#">Ver detalles</a>
+            <button class="btn btn-primary" type="button">Añadir</button>
+            <button class="btn btn-buy" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-od-id="kit-card-parlante">
+        <div class="card-media"><img src="../../assets/parlante.jpg" alt="Parlante bluetooth reacondicionado" loading="lazy"></div>
+        <div class="card-badges">
+          <span class="badge badge-tipo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>Físico
+          </span>
+        </div>
+        <button class="wish on" type="button" aria-label="Guardar en favoritos" aria-pressed="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21Z"/></svg>
+        </button>
+        <div class="card-cuerpo">
+          <div class="card-cond"><span class="punto reacondicionado"></span>Reacondicionado · Garantía 6 meses</div>
+          <h3><a href="#">Parlante Bluetooth · 20 h de batería</a></h3>
+          <div class="card-envio">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3m10 0h2v-5l4-4h-6"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+            Envío a todo Lima
+          </div>
+          <div class="card-precio"><span class="precio">S/ 129.00</span></div>
+          <div class="card-acciones">
+            <a class="btn btn-ghost" href="#">Ver detalles</a>
+            <button class="btn btn-primary" type="button">Añadir</button>
+            <button class="btn btn-buy" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section data-od-id="kit-lic-card">
+    <h2>Rail de licencias (.lic-card)</h2>
+    <div class="grid">
+      <article class="lic-card" data-od-id="kit-lic-office">
+        <div class="lic-inner">
+          <div class="lic-top">
+            <span class="lic-logo" aria-hidden="true">M</span>
+            <span class="badge badge-digital">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>Digital
+            </span>
+          </div>
+          <h3>Microsoft 365 Personal · 12 Meses</h3>
+          <p>Word, Excel y 1 TB en la nube por un año, activado con tu propio correo.</p>
+          <div class="lic-foot">
+            <div class="precio">S/ 199.00<small>Entrega inmediata</small></div>
+            <button class="btn btn-accent btn-sm" type="button">Comprar ahora</button>
+          </div>
+        </div>
+      </article>
+
+      <div class="confianza-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>
+        <h3>Garantía escrita</h3>
+        <p>Cada producto sale con su garantía por escrito: qué cubre, cuánto dura y cómo usarla.</p>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
