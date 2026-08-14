@@ -505,11 +505,14 @@
     </div>
   </aside>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/supabase-config.js"></script>
   <script src="assets/data.js"></script>
+  <script src="assets/catalogo-supabase.js"></script>
   <script src="assets/app.js"></script>
   <script>
     /* ============ Portada: licencias + catálogo ============ */
-    (function () {
+    window.AnluvCatalogReady.then(() => (function () {
       const $ = (s, c) => (c || document).querySelector(s);
       const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
@@ -718,7 +721,7 @@
       });
 
       aplicar();
-    })();
+    })());
   </script>
 </body>
 </html>

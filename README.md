@@ -15,6 +15,10 @@ The platform provides a full storefront: it includes a catalog with sticky filte
 
 **Capacidades núcleo** (implementadas en `assets/app.js`): carrito lateral con IGV desglosado y doble CTA (web + WhatsApp), compra rápida en 2 pasos con validación DNI/RUC y comprobantes Boleta/Factura/Nota de Venta, buscador texto/foto/voz con historial, magic nav con scroll-spy, y persistencia de tema, moneda, carrito y favoritos en `localStorage` con prefijo `anluv:`.
 
+## Administración de catálogo
+
+`admin.html` es el panel protegido para administrar productos, subir imágenes y cargar un catálogo CSV. Está diseñado para Supabase (Auth, Postgres y Storage): sigue `supabase/README.md`, ejecuta `supabase/schema.sql` y añade la Project URL y anon key en `assets/supabase-config.js`. Sin configurar Supabase, la tienda conserva el catálogo de demostración incluido en `assets/data.js`.
+
 ## Source & context references
 
 - Proyecto fuente: **«Plataforma e-commerce ANLUV»** (`222896c0-9afd-42ee-995d-02a181af3884`).
