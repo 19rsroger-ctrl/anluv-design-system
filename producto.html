@@ -14,6 +14,7 @@
   <link rel="canonical" id="canonical-producto" href="https://19rsroger-ctrl.github.io/anluv-design-system/producto.html">
   <script type="application/ld+json" id="schema-producto">{}</script>
   <link rel="stylesheet" href="assets/anluv.css">
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231B4F72'/%3E%3Cpath d='M6 20c3-4 7-4 10 0s7 4 10 0' stroke='%2317A2B8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 </head>
 <body>
@@ -80,6 +81,8 @@
       <div>
         <div class="galeria-principal" id="galeria-principal">
           <img id="foto-principal" src="" alt="" fetchpriority="high">
+          <model-viewer id="visor-3d" hidden camera-controls auto-rotate rotation-per-second="28deg" shadow-intensity="1" ar ar-modes="webxr scene-viewer quick-look" loading="lazy" reveal="auto"><button slot="ar-button" class="ar-button" type="button">Ver en tu espacio</button></model-viewer>
+          <button class="viewer-toggle u-oculto" id="abrir-3d" type="button" aria-pressed="false">Ver producto en 3D</button>
           <span class="galeria-contador" id="galeria-contador" aria-live="polite"></span>
           <button class="wish" type="button" id="ficha-wish" data-wish="" aria-label="Guardar en favoritos" aria-pressed="false" data-od-id="ficha-wish">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21Z"/></svg>
@@ -321,7 +324,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/supabase-config.js"></script>
   <script src="assets/data.js"></script>
-  <script src="assets/catalogo-supabase.js"></script>
+  <script src="assets/catalogo-supabase.js?v=20260815-3d"></script>
   <script src="assets/app.js"></script>
   <script>
     window.AnluvCatalogReady.then(() => (function () {
@@ -401,6 +404,8 @@
       /* Galería */
       const principal = $('#galeria-principal');
       const foto = $('#foto-principal');
+      const visor3d = $('#visor-3d');
+      const abrir3d = $('#abrir-3d');
       if (esDigital) {
         principal.classList.add('digital-art');
         foto.remove();
@@ -414,11 +419,28 @@
       } else {
         foto.src = p.img;
         foto.alt = p.imageAlt || p.nombre;
+        if (p.model3d) {
+          visor3d.src = p.model3d;
+          visor3d.poster = p.img;
+          visor3d.setAttribute('alt', 'Modelo 3D de ' + p.nombre);
+          if (p.model3dIos) visor3d.setAttribute('ios-src', p.model3dIos);
+          abrir3d.classList.remove('u-oculto');
+          abrir3d.addEventListener('click', () => {
+            const showing3d = visor3d.hidden;
+            visor3d.hidden = !showing3d;
+            foto.hidden = showing3d;
+            abrir3d.textContent = showing3d ? 'Volver a las fotos' : 'Ver producto en 3D';
+            abrir3d.setAttribute('aria-pressed', String(showing3d));
+          });
+        }
         const relacionadas = PRODUCTOS.filter(x => x.cat === p.cat && x.img && x.id !== p.id).slice(0, 2);
         const todas = [p.img].concat(relacionadas.map(r => r.img));
         $('#thumbs').innerHTML = todas.map((src, i) =>
           '<button type="button" class="' + (i === 0 ? 'sel' : '') + '" data-src="' + src + '" aria-label="Ver foto ' + (i + 1) + ' de ' + todas.length + '"><img src="' + src + '" alt="" loading="lazy"></button>').join('');
         $$('#thumbs button').forEach(b => b.addEventListener('click', () => {
+          visor3d.hidden = true;
+          foto.hidden = false;
+          if (p.model3d) { abrir3d.textContent = 'Ver producto en 3D'; abrir3d.setAttribute('aria-pressed', 'false'); }
           foto.src = b.dataset.src;
           $$('#thumbs button').forEach(x => x.classList.toggle('sel', x === b));
         }));
