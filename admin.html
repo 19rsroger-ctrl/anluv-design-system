@@ -29,6 +29,12 @@
         <p class="import-note">Columnas requeridas: <code>name,category,type,condition,price,stock</code>. Opcionales: <code>brand,shipping,summary,image_url,active,specs</code>. En <code>specs</code> usa <code>Procesador: Ryzen 5 | Memoria: 16 GB</code>.</p>
         <input id="csv" type="file" accept=".csv,text/csv"><div class="actions"><button id="import-csv" type="button">Validar e importar CSV</button></div><div id="csv-preview" class="preview"></div><p id="csv-status" class="status" aria-live="polite"></p>
       </section>
+      <section class="card panel"><div class="panel-head"><div><h2>Carga asistida con IA</h2><p class="muted">Selecciona una o varias fotos. Cada foto crea un borrador de producto; la IA propone los datos y te pregunta únicamente lo que no puede saber.</p></div></div>
+        <div class="ai-note"><b>Publicación controlada:</b> ninguna foto ni producto se publica hasta que revises los borradores y confirmes la publicación final.</div>
+        <label class="upload-label">Fotos de productos<input id="ai-images" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+        <div class="actions"><button id="analyze-images" type="button">Analizar fotos con IA</button><button id="review-drafts" class="secondary" type="button" disabled>Revisar y publicar borradores</button></div>
+        <p id="ai-status" class="status" aria-live="polite"></p><div id="drafts" class="drafts"></div>
+      </section>
       <section class="card panel"><div class="panel-head"><div><h2>Productos</h2><p class="muted" id="product-count"></p></div><button id="refresh" class="secondary" type="button">Actualizar</button></div><div class="table-wrap"><table><thead><tr><th>Producto</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody id="products"></tbody></table></div></section>
     </section>
   </main>
