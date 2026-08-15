@@ -15,7 +15,7 @@
       <section class="card panel"><div class="panel-head"><div><h2 id="form-title">Agregar producto</h2><p class="muted">Completa los datos y guarda.</p></div><button id="cancel-edit" class="secondary hidden" type="button">Cancelar edición</button></div>
         <form id="product-form" class="grid">
           <input id="product-id" type="hidden"><label>Nombre<input id="name" required maxlength="160"></label><label>Marca<input id="brand" maxlength="80"></label>
-          <label>Categoría<select id="category" required><option value="laptops">Laptops</option><option value="componentes">Componentes</option><option value="licencias">Licencias</option><option value="accesorios">Accesorios</option><option value="audio">Audio</option></select></label>
+          <label>Categoría<input id="category" list="category-list" required placeholder="Ej.: Scooters eléctricos"></label><datalist id="category-list"></datalist>
           <label>Tipo<select id="type"><option value="fisico">Físico</option><option value="digital">Digital</option></select></label>
           <label>Condición<select id="condition"><option value="nuevo">Nuevo</option><option value="reacondicionado">Reacondicionado</option><option value="usado">Usado</option><option value="openbox">Open Box</option><option value="repuestos">Para repuestos</option></select></label>
           <label>Precio (S/)<input id="price" type="number" min="0" step="0.01" required></label><label>Stock<input id="stock" type="number" min="0" step="1" required value="0"></label><label>Entrega / envío<input id="shipping" placeholder="Envío a todo Lima"></label>
@@ -29,6 +29,7 @@
         <p class="import-note">Columnas requeridas: <code>name,category,type,condition,price,stock</code>. Opcionales: <code>brand,shipping,summary,image_url,active,specs</code>. En <code>specs</code> usa <code>Procesador: Ryzen 5 | Memoria: 16 GB</code>.</p>
         <input id="csv" type="file" accept=".csv,text/csv"><div class="actions"><button id="import-csv" type="button">Validar e importar CSV</button></div><div id="csv-preview" class="preview"></div><p id="csv-status" class="status" aria-live="polite"></p>
       </section>
+      <section class="card panel"><div class="panel-head"><div><h2>Categorías</h2><p class="muted">Crea categorías nuevas para el catálogo y para las sugerencias de la IA.</p></div></div><div class="actions"><input id="new-category" placeholder="Ej.: Scooters eléctricos"><button id="add-category" type="button">Crear categoría</button></div><p id="category-status" class="status" aria-live="polite"></p></section>
       <section class="card panel"><div class="panel-head"><div><h2>Carga asistida con IA</h2><p class="muted">Selecciona una o varias fotos. Cada foto crea un borrador de producto; la IA propone los datos y te pregunta únicamente lo que no puede saber.</p></div></div>
         <div class="ai-note"><b>Publicación controlada:</b> ninguna foto ni producto se publica hasta que revises los borradores y confirmes la publicación final.</div>
         <label class="upload-label">Fotos de productos<input id="ai-images" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
