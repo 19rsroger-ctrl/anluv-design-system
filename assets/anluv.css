@@ -660,8 +660,8 @@ footer { background: var(--primary-strong); color: oklch(0.85 0.03 228); margin-
 .miga a:hover { color: var(--accent); }
 .ficha-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 40px; align-items: start; }
 @media (max-width: 900px) { .ficha-grid { grid-template-columns: 1fr; gap: 26px; } }
-.galeria-principal { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--surface-2); aspect-ratio: 4/3; box-shadow: var(--shadow-1); }
-.galeria-principal img { width: 100%; height: 100%; object-fit: cover; }
+.galeria-principal { position: relative; border-radius: var(--radius); overflow: hidden; background: radial-gradient(circle at 50% 30%, oklch(0.25 0.035 245), var(--surface-2)); aspect-ratio: 4/3; box-shadow: var(--shadow-1); }
+.galeria-principal img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .galeria-principal model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at 50% 20%, oklch(0.96 0.01 220), var(--surface-2)); }
 .viewer-toggle { position: absolute; z-index: 3; right: 14px; bottom: 14px; background: var(--primary); color: #fff; border-radius: 999px; padding: 10px 14px; font: 600 12px/1 var(--font-body); box-shadow: 0 5px 16px oklch(0.22 0.04 245 / .25); }
 .ar-button { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); border: 0; border-radius: 999px; padding: 11px 15px; background: var(--accent); color: var(--primary-strong); font: 650 13px/1 var(--font-body); box-shadow: var(--shadow-1); }
