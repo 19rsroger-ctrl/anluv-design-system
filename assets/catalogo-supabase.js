@@ -6,14 +6,18 @@ window.AnluvCatalogReady = (async function () {
 
   const client = window.supabase.createClient(config.url, config.anonKey);
   window.AnluvSupabase = client;
-  const { data, error } = await client.from('products')
-    .select('*').eq('active', true).order('created_at', { ascending: false });
+  const [{ data, error }, { data: categoryRows }] = await Promise.all([
+    client.from('products').select('*').eq('active', true).order('created_at', { ascending: false }),
+    client.from('categories').select('slug,name')
+  ]);
 
   if (error) {
     console.warn('ANLUV: no se pudo cargar el catálogo de Supabase.', error.message);
     return;
   }
   if (!data || !data.length) return;
+
+  window.ANLUV_CATEGORY_NAMES = Object.fromEntries((categoryRows || []).map(c => [c.slug, c.name]));
 
   const productos = data.map(p => ({
     id: p.slug || p.id,
