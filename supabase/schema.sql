@@ -18,6 +18,8 @@ create table if not exists public.products (
   price numeric(12,2) not null check (price >= 0),
   stock integer not null default 0 check (stock >= 0),
   image_url text,
+  model_3d_url text,
+  model_3d_ios_url text,
   shipping text,
   summary text,
   specs jsonb not null default '{}'::jsonb,
