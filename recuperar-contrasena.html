@@ -36,7 +36,7 @@
         const button = form.querySelector('button');
         button.disabled = true;
         setStatus('Enviando enlace…');
-        const redirectTo = new URL('admin.html', window.location.href).href;
+        const redirectTo = new URL('admin.html?recovery=1', window.location.href).href;
         const { error } = await db.auth.resetPasswordForEmail(document.querySelector('#email').value.trim(), { redirectTo });
         button.disabled = false;
         if (error) return setStatus(error.message || 'No se pudo enviar el enlace.', true);
