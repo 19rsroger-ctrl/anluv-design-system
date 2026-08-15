@@ -33,6 +33,7 @@ window.AnluvCatalogReady = (async function () {
     vendidos: 0,
     resumen: p.summary || '',
     specs: p.specs || {},
+    model: p.model || '', sku: p.sku || '', gtin: p.gtin || '', mpn: p.mpn || '', warranty: p.warranty || '', imageAlt: p.image_alt || '', seoTitle: p.seo_title || '', seoDescription: p.seo_description || '',
   }));
   window.PRODUCTOS.splice(0, window.PRODUCTOS.length, ...productos);
   document.dispatchEvent(new CustomEvent('anluv:catalogo-listo'));
