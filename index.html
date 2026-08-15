@@ -518,9 +518,10 @@
 
       /* — Rail de licencias digitales — */
       const rail = $('#rail-licencias');
-      const licIds = ['lic-windows11', 'lic-office365', 'lic-eset'];
-      rail.innerHTML = licIds.map(id => {
-        const p = PRODUCTOS.find(x => x.id === id);
+      const licencias = PRODUCTOS.filter(p => p.tipo === 'digital').slice(0, 3);
+      const licenciasSection = $('#licencias');
+      if (!licencias.length) licenciasSection.hidden = true;
+      rail.innerHTML = licencias.map(p => {
         return (
           '<article class="lic-card reveal in" data-od-id="lic-' + p.id + '">' +
             '<div class="lic-inner">' +
@@ -540,14 +541,17 @@
       }).join('');
 
       /* — Filtros: opciones dinámicas — */
-      $('#f-categorias').innerHTML = CATEGORIAS.map(c =>
+      const categoryName = slug => slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+      const categoriasCatalogo = [...new Set(PRODUCTOS.map(p => p.cat))].sort().map(id => ({ id, nombre: (CATEGORIAS.find(c => c.id === id) || {}).nombre || categoryName(id) }));
+      $('#f-categorias').innerHTML = categoriasCatalogo.map(c =>
         '<label class="check"><input type="checkbox" class="f-cat" value="' + c.id + '"> ' + c.nombre + '</label>').join('');
       const marcas = [...new Set(PRODUCTOS.map(p => p.marca))].sort();
       $('#f-marcas').innerHTML = marcas.map(m =>
         '<label class="check"><input type="checkbox" class="f-marca" value="' + m + '"> ' + m + '</label>').join('');
 
       /* — Estado de filtros — */
-      const estado = { q: '', cats: new Set(), conds: new Set(), tipos: new Set(), marcas: new Set(), max: 5300, stock: false, orden: 'relevancia' };
+      const maxCatalogo = Math.max(5300, ...PRODUCTOS.map(p => Number(p.precio) || 0));
+      const estado = { q: '', cats: new Set(), conds: new Set(), tipos: new Set(), marcas: new Set(), max: maxCatalogo, stock: false, orden: 'relevancia' };
 
       /* Interpretación ligera de lenguaje natural (simula la búsqueda semántica) */
       function interpretar(q) {
@@ -668,6 +672,9 @@
         aplicar();
       });
       const rango = $('#f-precio');
+      rango.max = maxCatalogo;
+      rango.value = maxCatalogo;
+      $('#f-precio-out').textContent = 'Hasta ' + Anluv.precio(maxCatalogo);
       rango.addEventListener('input', () => {
         estado.max = +rango.value;
         $('#f-precio-out').textContent = 'Hasta ' + Anluv.precio(estado.max);
@@ -675,10 +682,10 @@
       });
       $('#f-limpiar').addEventListener('click', () => {
         estado.cats.clear(); estado.conds.clear(); estado.tipos.clear(); estado.marcas.clear();
-        estado.max = 5300; estado.stock = false;
+        estado.max = maxCatalogo; estado.stock = false;
         $$('#filtros input[type="checkbox"]').forEach(c => { c.checked = false; });
-        rango.value = 5300;
-        $('#f-precio-out').textContent = 'Hasta ' + Anluv.precio(5300);
+        rango.value = maxCatalogo;
+        $('#f-precio-out').textContent = 'Hasta ' + Anluv.precio(maxCatalogo);
         aplicar();
       });
       $('#filtros-toggle').addEventListener('click', () => {
