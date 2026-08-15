@@ -662,6 +662,9 @@ footer { background: var(--primary-strong); color: oklch(0.85 0.03 228); margin-
 @media (max-width: 900px) { .ficha-grid { grid-template-columns: 1fr; gap: 26px; } }
 .galeria-principal { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--surface-2); aspect-ratio: 4/3; box-shadow: var(--shadow-1); }
 .galeria-principal img { width: 100%; height: 100%; object-fit: cover; }
+.galeria-principal model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at 50% 20%, oklch(0.96 0.01 220), var(--surface-2)); }
+.viewer-toggle { position: absolute; z-index: 3; right: 14px; bottom: 14px; background: var(--primary); color: #fff; border-radius: 999px; padding: 10px 14px; font: 600 12px/1 var(--font-body); box-shadow: 0 5px 16px oklch(0.22 0.04 245 / .25); }
+.ar-button { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); border: 0; border-radius: 999px; padding: 11px 15px; background: var(--accent); color: var(--primary-strong); font: 650 13px/1 var(--font-body); box-shadow: var(--shadow-1); }
 .galeria-principal .badge-gira { position: absolute; bottom: 14px; right: 14px; background: oklch(0.22 0.04 245 / 0.8); color: #fff; backdrop-filter: blur(4px); letter-spacing: .07em; text-transform: uppercase; font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; }
 .galeria-principal.digital-art { display: grid; place-items: center; background: var(--digital-grad); }
 .galeria-principal.digital-art .lic-logo { width: 92px; height: 92px; font-size: 34px; background: oklch(1 0 0 / 0.16); }
