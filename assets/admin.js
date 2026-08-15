@@ -9,6 +9,15 @@
   }
   const db = window.supabase.createClient(config.url, config.anonKey);
   let products = [], selectedImage = null, categories = [];
+  function selectPanel(name) {
+    document.querySelectorAll('[data-panel-target]').forEach(button => {
+      const active = button.dataset.panelTarget === name;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+    document.querySelectorAll('[data-panel]').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === name));
+  }
+  document.querySelectorAll('[data-panel-target]').forEach(button => button.addEventListener('click', () => selectPanel(button.dataset.panelTarget)));
   const esc = value => String(value || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const slugify = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   const specsToObject = text => (text || '').split(/\n|\|/).reduce((out, line) => { const i = line.indexOf(':'); if (i > 0) out[line.slice(0, i).trim()] = line.slice(i + 1).trim(); return out; }, {});
@@ -27,11 +36,12 @@
     const { data, error } = await db.from('products').select('*').order('created_at', {ascending:false});
     if (error) return status('#form-status', error.message, true);
     products = data; $('#product-count').textContent = products.length + (products.length === 1 ? ' producto' : ' productos');
+    const tabCount = $('#tab-product-count'); if (tabCount) tabCount.textContent = products.length;
     $('#products').innerHTML = products.map(p => '<tr><td class="name"><b>'+esc(p.name)+'</b><br><span class="muted">'+esc(p.brand || 'Sin marca')+'</span></td><td>S/ '+Number(p.price).toFixed(2)+'</td><td>'+p.stock+'</td><td>'+ (p.active ? 'Visible' : 'Oculto') +'</td><td><button class="secondary" data-edit="'+p.id+'" type="button">Editar</button></td></tr>').join('') || '<tr><td colspan="5" class="muted">Aún no hay productos cargados.</td></tr>';
     document.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => edit(products.find(p => p.id === b.dataset.edit))));
   }
   function resetForm() { $('#product-form').reset(); $('#product-id').value=''; $('#active').checked=true; selectedImage=null; $('#image-preview').innerHTML=''; $('#form-title').textContent='Agregar producto'; $('#cancel-edit').classList.add('hidden'); status('#form-status',''); }
-  function edit(p) { $('#product-id').value=p.id; $('#name').value=p.name; $('#brand').value=p.brand||''; $('#category').value=p.category; $('#type').value=p.type; $('#condition').value=p.condition; $('#price').value=p.price; $('#stock').value=p.stock; $('#shipping').value=p.shipping||''; $('#summary').value=p.summary||''; $('#specs').value=specsToText(p.specs); $('#model').value=p.model||''; $('#sku').value=p.sku||''; $('#gtin').value=p.gtin||''; $('#mpn').value=p.mpn||''; $('#warranty').value=p.warranty||''; $('#image-alt').value=p.image_alt||''; $('#seo-title').value=p.seo_title||''; $('#seo-description').value=p.seo_description||''; $('#active').checked=p.active; $('#image-preview').innerHTML=p.image_url?'<img src="'+esc(p.image_url)+'" alt="Foto actual">':''; $('#form-title').textContent='Editar producto'; $('#cancel-edit').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'}); }
+  function edit(p) { selectPanel('products'); $('#product-id').value=p.id; $('#name').value=p.name; $('#brand').value=p.brand||''; $('#category').value=p.category; $('#type').value=p.type; $('#condition').value=p.condition; $('#price').value=p.price; $('#stock').value=p.stock; $('#shipping').value=p.shipping||''; $('#summary').value=p.summary||''; $('#specs').value=specsToText(p.specs); $('#model').value=p.model||''; $('#sku').value=p.sku||''; $('#gtin').value=p.gtin||''; $('#mpn').value=p.mpn||''; $('#warranty').value=p.warranty||''; $('#image-alt').value=p.image_alt||''; $('#seo-title').value=p.seo_title||''; $('#seo-description').value=p.seo_description||''; $('#active').checked=p.active; $('#image-preview').innerHTML=p.image_url?'<img src="'+esc(p.image_url)+'" alt="Foto actual">':''; $('#form-title').textContent='Editar producto'; $('#cancel-edit').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'}); }
   async function uploadImage(file) { const ext=(file.name.split('.').pop()||'jpg').toLowerCase(); const path='products/'+crypto.randomUUID()+'.'+ext; const {error}=await db.storage.from('product-images').upload(path,file,{upsert:false,contentType:file.type}); if(error) throw error; return db.storage.from('product-images').getPublicUrl(path).data.publicUrl; }
   $('#login-form').addEventListener('submit', async e => { e.preventDefault(); status('#login-status','Ingresando…'); const {error}=await db.auth.signInWithPassword({email:$('#email').value,password:$('#password').value}); if(error) return status('#login-status',error.message,true); if(await ensureAdmin()) status('#login-status',''); });
   $('#activate-form').addEventListener('submit', async e => { e.preventDefault(); const password=$('#new-password').value; if(password !== $('#confirm-password').value) return status('#activate-status','Las contraseñas no coinciden.',true); status('#activate-status','Guardando contraseña…'); const {error}=await db.auth.updateUser({password}); if(error) return status('#activate-status',error.message,true); history.replaceState(null,'',location.pathname); status('#activate-status','Contraseña creada.'); await ensureAdmin(); });
