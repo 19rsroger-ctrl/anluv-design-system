@@ -542,7 +542,7 @@
 
       /* — Filtros: opciones dinámicas — */
       const categoryName = slug => slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-      const categoriasCatalogo = [...new Set(PRODUCTOS.map(p => p.cat))].sort().map(id => ({ id, nombre: (CATEGORIAS.find(c => c.id === id) || {}).nombre || categoryName(id) }));
+      const categoriasCatalogo = [...new Set(PRODUCTOS.map(p => p.cat))].sort().map(id => ({ id, nombre: window.ANLUV_CATEGORY_NAMES?.[id] || (CATEGORIAS.find(c => c.id === id) || {}).nombre || categoryName(id) }));
       $('#f-categorias').innerHTML = categoriasCatalogo.map(c =>
         '<label class="check"><input type="checkbox" class="f-cat" value="' + c.id + '"> ' + c.nombre + '</label>').join('');
       const marcas = [...new Set(PRODUCTOS.map(p => p.marca))].sort();
