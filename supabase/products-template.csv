@@ -1,2 +1,2 @@
-name,brand,category,type,condition,price,stock,shipping,summary,image_url,active,specs
-"Laptop Pro 14 · Ryzen 7 · 16 GB · 1 TB SSD",Lenovo,laptops,fisico,nuevo,3599,4,"Envío a todo Lima","Lista para trabajar y crear.",https://example.com/foto.jpg,true,"Procesador: Ryzen 7 | Memoria: 16 GB | Almacenamiento: SSD 1 TB"
+name,brand,category,type,condition,price,stock,shipping,summary,image_url,model_3d_url,model_3d_ios_url,active,specs
+"Laptop Pro 14 · Ryzen 7 · 16 GB · 1 TB SSD",Lenovo,laptops,fisico,nuevo,3599,4,"Envío a todo Lima","Lista para trabajar y crear.",https://example.com/foto.jpg,https://example.com/modelo.glb,https://example.com/modelo.usdz,true,"Procesador: Ryzen 7 | Memoria: 16 GB | Almacenamiento: SSD 1 TB"
