@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /recuperar-contrasena.html
 
-Sitemap: https://19rsroger-ctrl.github.io/anluv-design-system/sitemap.xml
+Sitemap: https://anluv.com/sitemap.xml
