@@ -1,7 +1,7 @@
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-const siteUrl = (process.env.SITE_URL || 'https://19rsroger-ctrl.github.io/anluv-design-system').replace(/\/$/, '');
+const siteUrl = (process.env.SITE_URL || 'https://anluv.com').replace(/\/$/, '');
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
