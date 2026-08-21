@@ -388,15 +388,6 @@ html[data-theme='dark'] .paso-inline b { color: var(--accent); }
   .pasos-linea > svg { transform: rotate(90deg); }
 }
 
-/* — Hésed compacto (franja) — */
-.hesed-franja { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
-.hesed-marca { display: flex; align-items: baseline; gap: 14px; flex: none; }
-.hesed-franja .hesed-palabra { font-size: clamp(34px, 4.5vw, 52px); margin: 0; }
-.hesed-franja .hesed-hebrew { font-size: clamp(16px, 2vw, 22px); opacity: .6; }
-.hesed-frase { flex: 1; min-width: 260px; margin: 0; font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; color: oklch(0.86 0.02 228); max-width: 62ch; }
-.hesed-frase strong { color: #fff; font-weight: 600; }
-@media (max-width: 640px) { .hesed-franja { gap: 16px; } }
-
 /* — Catálogo — */
 .catalogo-layout { display: grid; grid-template-columns: 264px 1fr; gap: 26px; align-items: start; }
 @media (max-width: 940px) { .catalogo-layout { grid-template-columns: 1fr; } }
@@ -508,20 +499,6 @@ html[data-theme='dark'] .wish { background: oklch(0.22 0.04 245 / 0.9); color: o
 .vacio svg { width: 44px; height: 44px; color: var(--muted); }
 .vacio h3 { font-size: 21px; }
 .vacio p { color: var(--muted); max-width: 46ch; }
-
-/* — Sección filosofía (Hésed) — */
-.filosofia { background: var(--primary-strong); color: oklch(0.94 0.02 230); }
-.filosofia .eyebrow { color: oklch(0.75 0.05 225); }
-.filosofia .poster-head p { color: oklch(0.82 0.03 228); }
-.hesed-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center; }
-@media (max-width: 860px) { .hesed-grid { grid-template-columns: 1fr; } }
-.hesed-palabra { font: 600 clamp(56px, 8vw, 96px)/1 var(--font-display); letter-spacing: -0.03em; color: oklch(0.80 0.10 205); }
-.hesed-grid h2 { font-size: clamp(28px, 3.6vw, 40px); margin: 10px 0 14px; }
-.hesed-grid p { color: oklch(0.84 0.025 228); line-height: 1.65; }
-.hesed-hebrew { font-size: clamp(40px, 6vw, 64px); line-height: 1; color: oklch(0.86 0.06 215); }
-.hesed-lista { list-style: none; display: grid; gap: 14px; margin-top: 22px; }
-.hesed-lista li { display: flex; gap: 12px; align-items: flex-start; }
-.hesed-lista svg { flex: none; width: 20px; height: 20px; color: oklch(0.78 0.11 205); margin-top: 2px; }
 
 /* — Magic nav — */
 .magic-nav {
