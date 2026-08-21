@@ -7,7 +7,7 @@
   <meta name="description" content="Tienda de tecnología en Ate, Lima. Laptops, componentes, accesorios y licencias originales con garantía escrita y trato humano de verdad.">
   <link rel="canonical" href="https://anluv.com/">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"ANLUV","url":"https://anluv.com/","logo":"https://anluv.com/assets/brand/logo-mark.svg"},{"@type":"WebSite","name":"ANLUV","url":"https://anluv.com/","inLanguage":"es-PE"}]}</script>
-  <link rel="stylesheet" href="assets/anluv.css">
+  <link rel="stylesheet" href="assets/anluv.css?v=20260821-visual-catalog">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231B4F72'/%3E%3Cpath d='M6 20c3-4 7-4 10 0s7 4 10 0' stroke='%2317A2B8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 </head>
 <body>
@@ -179,30 +179,16 @@
       </div>
     </section>
 
-    <!-- ============ Descubrimiento editorial ============ -->
-    <section class="selection" id="seleccion" data-od-id="seccion-seleccion">
+    <!-- ============ Navegación visual ============ -->
+    <section class="visual-browse" id="seleccion" data-od-id="seccion-seleccion">
       <div class="wrap">
-        <div class="selection-intro reveal">
-          <span class="eyebrow">Selección ANLUV</span>
-          <h2>Menos opciones.<br>Mejores decisiones.</h2>
-          <p>No ponemos todo al frente. Empezamos por los productos que realmente recomendamos y por lo que necesitas resolver hoy.</p>
-        </div>
-        <div id="featured-product" class="featured-product"></div>
+        <div class="visual-browse-head"><div><span class="eyebrow">Explora visualmente</span><h2>Encuentra lo que necesitas.</h2></div><p>Toca una categoría para ver productos reales, comparar opciones y decidir con calma.</p></div>
+        <div id="visual-categories" class="visual-categories" aria-label="Categorías de productos"></div>
       </div>
     </section>
 
-    <section class="needs" data-od-id="seccion-necesidades">
-      <div class="wrap">
-        <div class="needs-head">
-          <div><span class="eyebrow">Encuentra por intención</span><h2>¿Qué quieres hacer?</h2></div>
-          <p>Elige una situación y te llevaremos a una selección más útil que una lista interminable.</p>
-        </div>
-        <div class="needs-grid">
-          <button class="need-card need-work" type="button" data-discovery-query="laptop para trabajar oficina"><span class="need-index">01</span><b>Trabajar mejor</b><small>Equipos para oficina, estudio y videollamadas.</small><span>Ver selección →</span></button>
-          <button class="need-card need-fix" type="button" data-discovery-query="repuesto componente laptop"><span class="need-index">02</span><b>Reparar y mejorar</b><small>Componentes y repuestos difíciles de encontrar.</small><span>Ver selección →</span></button>
-          <button class="need-card need-enjoy" type="button" data-discovery-query="audio accesorios"><span class="need-index">03</span><b>Disfrutar más</b><small>Audio, accesorios y tecnología para cada día.</small><span>Ver selección →</span></button>
-        </div>
-      </div>
+    <section class="visual-picks" data-od-id="seccion-disponibles">
+      <div class="wrap"><div class="visual-browse-head"><div><span class="eyebrow">Disponible ahora</span><h2>Productos para mirar de cerca.</h2></div><a class="text-link" href="#catalogo">Ver todo el catálogo →</a></div><div id="visual-products" class="visual-products"></div></div>
     </section>
 
     <!-- ============ Licencias digitales destacadas ============ -->
@@ -302,6 +288,9 @@
         </div>
       </div>
     </section>
+
+    <aside id="compare-tray" class="compare-tray" aria-live="polite" hidden><div><span id="compare-count">0 productos</span><b>listos para comparar</b></div><button id="open-compare" class="btn btn-accent btn-sm" type="button" disabled>Comparar</button><button id="clear-compare" class="compare-clear" type="button">Limpiar</button></aside>
+    <dialog id="compare-dialog" class="compare-dialog"><div class="compare-dialog-head"><div><span class="eyebrow">Comparador</span><h2>Elige con claridad</h2></div><button id="close-compare" class="icon-btn" type="button" aria-label="Cerrar comparador">×</button></div><div id="compare-table" class="compare-table"></div></dialog>
 
     <!-- ============ Confianza: comprar sin miedo (compacta) ============ -->
     <section class="poster" id="confianza" data-od-id="seccion-confianza">
@@ -543,29 +532,7 @@
     window.AnluvCatalogReady.then(() => (function () {
       const $ = (s, c) => (c || document).querySelector(s);
       const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
-
-      /* — Producto protagonista: la portada empieza por una recomendación, no por una cuadrícula — */
-      const featuredHost = $('#featured-product');
-      const destacado = PRODUCTOS.find(p => p.tipo === 'fisico' && p.stock > 0) || PRODUCTOS.find(p => p.stock > 0) || PRODUCTOS[0];
-      if (destacado) {
-        const condicion = CONDICIONES[destacado.condicion] || {};
-        featuredHost.innerHTML =
-          '<article class="featured-card">' +
-            '<div class="featured-copy">' +
-              '<span class="featured-overline">Recomendado ahora · ' + (condicion.nombre || 'Disponible') + '</span>' +
-              '<h3>' + destacado.nombre + '</h3>' +
-              '<p>' + destacado.resumen + '</p>' +
-              '<div class="featured-meta"><span>' + destacado.marca + '</span><span>' + destacado.envio + '</span></div>' +
-              '<div class="featured-actions"><a class="btn btn-primary" href="producto.html?id=' + destacado.id + '">Conocer el producto</a><span class="precio" data-precio="' + destacado.precio + '">' + Anluv.precioDual(destacado.precio, 'Incluye IGV') + '</span></div>' +
-            '</div>' +
-            '<a class="featured-media" href="producto.html?id=' + destacado.id + '" aria-label="Ver ' + destacado.nombre + '"><img src="' + destacado.img + '" alt="' + destacado.nombre + '"></a>' +
-          '</article>';
-      } else {
-        $('#seleccion').hidden = true;
-      }
-      $$('[data-discovery-query]').forEach(button => button.addEventListener('click', () => {
-        document.dispatchEvent(new CustomEvent('anluv:buscar', { detail: { q: button.dataset.discoveryQuery } }));
-      }));
+      const safe = value => String(value || '').replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
 
       /* — Rail de licencias digitales — */
       const rail = $('#rail-licencias');
@@ -595,20 +562,46 @@
       const categoryName = slug => slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
       const categoriasCatalogo = [...new Set(PRODUCTOS.map(p => p.cat))].sort().map(id => ({ id, nombre: window.ANLUV_CATEGORY_NAMES?.[id] || (CATEGORIAS.find(c => c.id === id) || {}).nombre || categoryName(id) }));
       $('#f-categorias').innerHTML = categoriasCatalogo.map(c =>
-        '<label class="check"><input type="checkbox" class="f-cat" value="' + c.id + '"> ' + c.nombre + '</label>').join('');
+        '<label class="check visual-filter"><input type="checkbox" class="f-cat" value="' + c.id + '"><img src="' + safe((PRODUCTOS.find(p => p.cat === c.id) || {}).img) + '" alt=""><span>' + safe(c.nombre) + '</span></label>').join('');
       const marcas = [...new Set(PRODUCTOS.map(p => p.marca))].sort();
       $('#f-marcas').innerHTML = marcas.map(m =>
         '<label class="check"><input type="checkbox" class="f-marca" value="' + m + '"> ' + m + '</label>').join('');
 
+      /* — Descubrimiento visual: cada categoría se representa con un producto real — */
+      const visualCategoryHost = $('#visual-categories');
+      visualCategoryHost.innerHTML = categoriasCatalogo.map((category, index) => {
+        const sample = PRODUCTOS.find(product => product.cat === category.id && product.img) || PRODUCTOS.find(product => product.cat === category.id);
+        return '<a class="visual-category" href="#catalogo" data-browse-category="' + safe(category.id) + '" style="--visual-order:' + index + '">' +
+          (sample?.img ? '<img src="' + safe(sample.img) + '" alt="' + safe(category.nombre) + '" loading="lazy">' : '<span class="visual-placeholder">ANLUV</span>') +
+          '<span class="visual-category-shade"></span><span class="visual-category-label"><b>' + safe(category.nombre) + '</b><small>Explorar →</small></span></a>';
+      }).join('');
+      if (!categoriasCatalogo.length) $('#seleccion').hidden = true;
+
+      const visualProductsHost = $('#visual-products');
+      const visualProducts = PRODUCTOS.filter(product => product.stock > 0).slice(0, 6);
+      visualProductsHost.innerHTML = visualProducts.map(product =>
+        '<article class="visual-product"><a class="visual-product-image" href="producto.html?id=' + safe(product.id) + '">' +
+          (product.tipo === 'digital' ? '<span class="visual-digital">' + safe(product.marca?.slice(0, 1)) + '</span>' : '<img src="' + safe(product.img) + '" alt="' + safe(product.nombre) + '" loading="lazy">') +
+          '</a><div class="visual-product-copy"><span>' + safe(product.marca || 'ANLUV') + '</span><h3><a href="producto.html?id=' + safe(product.id) + '">' + safe(product.nombre) + '</a></h3><div class="visual-product-bottom"><div class="precio" data-precio="' + product.precio + '">' + Anluv.precioDual(product.precio, 'Incluye IGV') + '</div><button class="compare-button" type="button" data-compare="' + safe(product.id) + '">Comparar</button></div></div></article>'
+      ).join('') || '<p class="muted">Muy pronto verás productos disponibles aquí.</p>';
+
       /* — Estado de filtros — */
       const maxCatalogo = Math.max(5300, ...PRODUCTOS.map(p => Number(p.precio) || 0));
       const estado = { q: '', cats: new Set(), conds: new Set(), tipos: new Set(), marcas: new Set(), max: maxCatalogo, stock: false, orden: 'relevancia' };
+
+      $$('[data-browse-category]').forEach(link => link.addEventListener('click', event => {
+        event.preventDefault();
+        estado.q = ''; estado.cats = new Set([link.dataset.browseCategory]);
+        $$('.f-cat').forEach(input => { input.checked = input.value === link.dataset.browseCategory; });
+        aplicar(); $('#catalogo').scrollIntoView({behavior:'smooth', block:'start'});
+      }));
 
       /* Interpretación ligera de lenguaje natural (simula la búsqueda semántica) */
       function interpretar(q) {
         const t = q.toLowerCase();
         const out = { q: t, max: null, cat: null };
         const m = t.match(/(\d[\d.\s]*)\s*(mil|soles|s\/)?/);
+        if (PRODUCTOS.some(product => product.cat === t)) out.cat = t;
         if (t.includes('editar') || t.includes('diseñ') || t.includes('video')) out.cat = 'laptops';
         if (t.includes('estudiar') || t.includes('oficina') || t.includes('trabaj')) out.cat = 'laptops';
         if (t.includes('mouse')) out.cat = 'accesorios';
@@ -660,6 +653,7 @@
                   'Comprar ahora' +
                 '</button>' +
               '</div>' +
+              '<button class="card-compare" type="button" data-compare="' + p.id + '">Comparar producto</button>' +
             '</div>' +
           '</article>'
         );
@@ -702,6 +696,36 @@
         const quitar = $('#chip-quitar');
         if (quitar) quitar.addEventListener('click', limpiarBusqueda);
       }
+
+      /* — Comparador: conserva la selección mientras navegas por categorías y filtros — */
+      const compareIds = new Set();
+      const compareTray = $('#compare-tray');
+      const compareButton = $('#open-compare');
+      const compareDialog = $('#compare-dialog');
+      function updateCompare() {
+        const selected = PRODUCTOS.filter(product => compareIds.has(product.id));
+        compareTray.hidden = !selected.length;
+        $('#compare-count').textContent = selected.length + (selected.length === 1 ? ' producto' : ' productos');
+        compareButton.disabled = selected.length < 2;
+        $$('[data-compare]').forEach(button => { const selectedNow = compareIds.has(button.dataset.compare); button.classList.toggle('selected', selectedNow); button.textContent = selectedNow ? 'Añadido ✓' : (button.classList.contains('card-compare') ? 'Comparar producto' : 'Comparar'); });
+      }
+      function renderCompare() {
+        const selected = PRODUCTOS.filter(product => compareIds.has(product.id));
+        const specs = [...new Set(selected.flatMap(product => Object.keys(product.especificaciones || {})))].slice(0, 8);
+        $('#compare-table').innerHTML = '<div class="compare-products">' + selected.map(product => '<article><img src="' + safe(product.img) + '" alt="' + safe(product.nombre) + '"><h3>' + safe(product.nombre) + '</h3><b>' + Anluv.precio(product.precio) + '</b><button class="compare-remove" type="button" data-compare="' + safe(product.id) + '">Quitar</button></article>').join('') + '</div><div class="compare-specs">' + [['Estado', product => CONDICIONES[product.condicion]?.nombre || '—'], ['Garantía', product => product.garantia || 'Consultar'], ['Envío', product => product.envio || 'Consultar'], ...specs.map(key => [key, product => product.especificaciones?.[key] || '—'])].map(([label, value]) => '<div class="compare-row"><b>' + safe(label) + '</b>' + selected.map(product => '<span>' + safe(value(product)) + '</span>').join('') + '</div>').join('') + '</div>';
+      }
+      document.addEventListener('click', event => {
+        const target = event.target.closest('[data-compare]');
+        if (!target) return;
+        const id = target.dataset.compare;
+        if (compareIds.has(id)) compareIds.delete(id);
+        else if (compareIds.size < 3) compareIds.add(id);
+        else { Anluv.toast('Compara hasta 3 productos a la vez.'); return; }
+        updateCompare();
+      });
+      $('#open-compare').addEventListener('click', () => { renderCompare(); compareDialog.showModal(); });
+      $('#close-compare').addEventListener('click', () => compareDialog.close());
+      $('#clear-compare').addEventListener('click', () => { compareIds.clear(); updateCompare(); });
 
       function limpiarBusqueda() {
         estado.q = '';
