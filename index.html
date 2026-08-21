@@ -153,8 +153,8 @@
         <h1>Tu orilla segura<br>en el <span class="mar">mar digital</span></h1>
         <p class="lead">En ANLUV no te vendemos hardware. Te entregamos la tranquilidad de estar listo: la herramienta exacta para ti, al precio que ves y con alguien que responde después de la compra.</p>
         <div class="hero-ctas">
-          <a class="btn btn-accent" href="#catalogo" data-od-id="cta-catalogo">
-            Ver catálogo
+          <a class="btn btn-accent" href="#seleccion" data-od-id="cta-catalogo">
+            Explorar selección
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m7-7-7 7-7-7"/></svg>
           </a>
           <button class="btn btn-outline-photo" type="button" id="btn-pdf" data-od-id="cta-pdf">
@@ -179,6 +179,32 @@
       </div>
     </section>
 
+    <!-- ============ Descubrimiento editorial ============ -->
+    <section class="selection" id="seleccion" data-od-id="seccion-seleccion">
+      <div class="wrap">
+        <div class="selection-intro reveal">
+          <span class="eyebrow">Selección ANLUV</span>
+          <h2>Menos opciones.<br>Mejores decisiones.</h2>
+          <p>No ponemos todo al frente. Empezamos por los productos que realmente recomendamos y por lo que necesitas resolver hoy.</p>
+        </div>
+        <div id="featured-product" class="featured-product"></div>
+      </div>
+    </section>
+
+    <section class="needs" data-od-id="seccion-necesidades">
+      <div class="wrap">
+        <div class="needs-head">
+          <div><span class="eyebrow">Encuentra por intención</span><h2>¿Qué quieres hacer?</h2></div>
+          <p>Elige una situación y te llevaremos a una selección más útil que una lista interminable.</p>
+        </div>
+        <div class="needs-grid">
+          <button class="need-card need-work" type="button" data-discovery-query="laptop para trabajar oficina"><span class="need-index">01</span><b>Trabajar mejor</b><small>Equipos para oficina, estudio y videollamadas.</small><span>Ver selección →</span></button>
+          <button class="need-card need-fix" type="button" data-discovery-query="repuesto componente laptop"><span class="need-index">02</span><b>Reparar y mejorar</b><small>Componentes y repuestos difíciles de encontrar.</small><span>Ver selección →</span></button>
+          <button class="need-card need-enjoy" type="button" data-discovery-query="audio accesorios"><span class="need-index">03</span><b>Disfrutar más</b><small>Audio, accesorios y tecnología para cada día.</small><span>Ver selección →</span></button>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Licencias digitales destacadas ============ -->
     <section class="poster" id="licencias" data-od-id="seccion-licencias">
       <div class="wrap">
@@ -195,9 +221,9 @@
     <section class="poster" id="catalogo" data-od-id="seccion-catalogo" style="padding-top:24px">
       <div class="wrap">
         <div class="poster-head reveal">
-          <span class="eyebrow">Catálogo</span>
-          <h2>Elige con calma, compra con certeza</h2>
-          <p>Cada tarjeta te dice exactamente qué es, en qué estado está y cómo te llega. Sin letra chica.</p>
+          <span class="eyebrow">Catálogo completo</span>
+          <h2>Explora todo, a tu ritmo</h2>
+          <p>Cuando quieras comparar, aquí tienes cada producto, sus especificaciones y filtros claros.</p>
         </div>
 
         <div class="catalogo-layout">
@@ -517,6 +543,29 @@
     window.AnluvCatalogReady.then(() => (function () {
       const $ = (s, c) => (c || document).querySelector(s);
       const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+      /* — Producto protagonista: la portada empieza por una recomendación, no por una cuadrícula — */
+      const featuredHost = $('#featured-product');
+      const destacado = PRODUCTOS.find(p => p.tipo === 'fisico' && p.stock > 0) || PRODUCTOS.find(p => p.stock > 0) || PRODUCTOS[0];
+      if (destacado) {
+        const condicion = CONDICIONES[destacado.condicion] || {};
+        featuredHost.innerHTML =
+          '<article class="featured-card">' +
+            '<div class="featured-copy">' +
+              '<span class="featured-overline">Recomendado ahora · ' + (condicion.nombre || 'Disponible') + '</span>' +
+              '<h3>' + destacado.nombre + '</h3>' +
+              '<p>' + destacado.resumen + '</p>' +
+              '<div class="featured-meta"><span>' + destacado.marca + '</span><span>' + destacado.envio + '</span></div>' +
+              '<div class="featured-actions"><a class="btn btn-primary" href="producto.html?id=' + destacado.id + '">Conocer el producto</a><span class="precio" data-precio="' + destacado.precio + '">' + Anluv.precioDual(destacado.precio, 'Incluye IGV') + '</span></div>' +
+            '</div>' +
+            '<a class="featured-media" href="producto.html?id=' + destacado.id + '" aria-label="Ver ' + destacado.nombre + '"><img src="' + destacado.img + '" alt="' + destacado.nombre + '"></a>' +
+          '</article>';
+      } else {
+        $('#seleccion').hidden = true;
+      }
+      $$('[data-discovery-query]').forEach(button => button.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('anluv:buscar', { detail: { q: button.dataset.discoveryQuery } }));
+      }));
 
       /* — Rail de licencias digitales — */
       const rail = $('#rail-licencias');
