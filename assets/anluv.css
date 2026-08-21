@@ -248,6 +248,41 @@ section.poster { padding: 96px 0; }
 .poster-head p { color: var(--muted); font-size: 17px; max-width: 58ch; }
 .poster-head.center { margin-inline: auto; text-align: center; justify-items: center; }
 
+/* — Descubrimiento editorial — */
+.selection { padding: 112px 0 52px; overflow: hidden; }
+.selection-intro { max-width: 720px; margin-bottom: 42px; }
+.selection-intro h2 { font-size: clamp(42px, 6vw, 76px); line-height: .98; letter-spacing: -.055em; margin: 12px 0 18px; }
+.selection-intro p { max-width: 56ch; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.featured-card { min-height: 560px; display: grid; grid-template-columns: minmax(0, .95fr) minmax(360px, 1.05fr); border-radius: 30px; overflow: hidden; background: var(--primary-strong); color: #fff; }
+.featured-copy { padding: clamp(34px, 6vw, 86px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.featured-overline { color: oklch(.80 .11 205); font: 600 12px/1 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+.featured-copy h3 { font-size: clamp(34px, 4vw, 58px); line-height: 1.04; letter-spacing: -.045em; margin: 18px 0; max-width: 13ch; }
+.featured-copy > p { color: oklch(.86 .02 230); font-size: 17px; line-height: 1.6; max-width: 42ch; }
+.featured-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 23px; }
+.featured-meta span { padding: 8px 11px; border: 1px solid oklch(1 0 0 / .18); border-radius: 999px; color: oklch(.90 .02 230); font-size: 12px; }
+.featured-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; margin-top: 32px; }
+.featured-actions .precio { color: #fff; }
+.featured-actions .precio .precio-alt { color: oklch(.75 .02 230); }
+.featured-media { position: relative; min-height: 390px; background: var(--surface-2); }
+.featured-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, oklch(.19 .05 240 / .18), transparent 45%); pointer-events: none; }
+.featured-media img { width: 100%; height: 100%; object-fit: contain; padding: clamp(20px, 4vw, 64px); transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.featured-card:hover .featured-media img { transform: scale(1.045); }
+.needs { padding: 52px 0 112px; }
+.needs-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+.needs-head h2 { font-size: clamp(30px, 4vw, 46px); margin-top: 9px; }
+.needs-head p { max-width: 42ch; color: var(--muted); line-height: 1.5; }
+.needs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.need-card { min-height: 252px; padding: 27px; border-radius: 22px; color: #fff; text-align: left; display: flex; flex-direction: column; align-items: flex-start; transition: transform .25s, box-shadow .25s; overflow: hidden; }
+.need-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-2); }
+.need-work { background: linear-gradient(145deg, oklch(.30 .07 244), oklch(.20 .04 240)); }
+.need-fix { background: linear-gradient(145deg, oklch(.33 .08 205), oklch(.20 .05 225)); }
+.need-enjoy { background: linear-gradient(145deg, oklch(.36 .09 285), oklch(.21 .06 275)); }
+.need-index { color: oklch(1 0 0 / .52); font: 600 12px/1 var(--font-body); letter-spacing: .12em; }
+.need-card b { font: 600 27px/1.08 var(--font-display); letter-spacing: -.035em; margin-top: auto; }
+.need-card small { max-width: 27ch; margin-top: 9px; color: oklch(1 0 0 / .72); font-size: 13px; line-height: 1.45; }
+.need-card > span:last-child { margin-top: 20px; font-size: 13px; font-weight: 600; color: oklch(.80 .12 205); }
+@media (max-width: 760px) { .selection { padding: 76px 0 34px; } .featured-card { min-height: 0; grid-template-columns: 1fr; border-radius: 22px; } .featured-copy { padding: 34px 28px; } .featured-media { min-height: 320px; grid-row: 1; } .featured-copy h3 { max-width: none; } .needs { padding: 34px 0 72px; } .needs-head { display: block; } .needs-head p { margin-top: 12px; } .needs-grid { grid-template-columns: 1fr; } .need-card { min-height: 190px; } }
+
 /* — Carrusel de licencias digitales — */
 .rail { display: grid; grid-auto-flow: column; grid-auto-columns: min(320px, 82vw); gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 4px 22px; scrollbar-width: none; }
 .rail::-webkit-scrollbar { display: none; }
