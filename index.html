@@ -182,7 +182,7 @@
     <!-- ============ Navegación visual ============ -->
     <section class="visual-browse" id="seleccion" data-od-id="seccion-seleccion">
       <div class="wrap">
-        <div class="visual-browse-head"><div><span class="eyebrow">Explora visualmente</span><h2>Encuentra lo que necesitas.</h2></div><p>Toca una categoría para ver productos reales, comparar opciones y decidir con calma.</p></div>
+        <div class="visual-browse-head"><div><span class="eyebrow">Explora visualmente</span><h2>Compra por familia de producto.</h2></div><p>Mouse, teclados y accesorios van juntos. Toca una familia para explorar y comparar con calma.</p></div>
         <div id="visual-categories" class="visual-categories" aria-label="Categorías de productos"></div>
       </div>
     </section>
@@ -553,15 +553,34 @@
       $('#f-marcas').innerHTML = marcas.map(m =>
         '<label class="check"><input type="checkbox" class="f-marca" value="' + m + '"> ' + m + '</label>').join('');
 
-      /* — Descubrimiento visual: cada categoría se representa con un producto real — */
+      /* — Descubrimiento visual: agrupa subcategorías para no obligar a adivinar dónde buscar — */
+      const groupDefinitions = [
+        { id:'perifericos', name:'Periféricos y accesorios', detail:'Mouse, teclados, cables y accesorios', match:/mouse|teclad|accesor|cable|cargador|adaptador|hub|webcam|control|gamepad|soporte/ },
+        { id:'audio', name:'Audio', detail:'Audífonos, parlantes y sonido', match:/audio|auricular|audifono|parlante|microfono|headset/ },
+        { id:'software', name:'Software y seguridad', detail:'Licencias, antivirus y programas', match:/licencia|software|antivirus|office|windows|eset/ },
+        { id:'almacenamiento', name:'Almacenamiento', detail:'SSD, memorias, discos y tarjetas', match:/almacen|ssd|disco|memoria|usb|tarjeta/ },
+        { id:'reparacion', name:'Componentes y reparación', detail:'Partes, baterías y repuestos', match:/componente|repuesto|bateria|placa|bios|laptop|pantalla/ },
+        { id:'movilidad', name:'Movilidad', detail:'Scooters y tecnología para moverte', match:/scooter|movilidad/ },
+        { id:'auto', name:'Tecnología para auto', detail:'Accesorios y electrónica para el camino', match:/auto|vehiculo|carro/ }
+      ];
+      const assignedCategories = new Set();
+      const groupedCategories = groupDefinitions.map(group => {
+        const categories = categoriasCatalogo.filter(category => !assignedCategories.has(category.id) && group.match.test((category.id + ' ' + category.nombre).toLowerCase()));
+        categories.forEach(category => assignedCategories.add(category.id));
+        return {...group, categories};
+      }).filter(group => group.categories.length);
+      const remainingCategories = categoriasCatalogo.filter(category => !assignedCategories.has(category.id));
+      if (remainingCategories.length) groupedCategories.push({id:'otros',name:'Más tecnología',detail:'Productos especiales y novedades',categories:remainingCategories});
       const visualCategoryHost = $('#visual-categories');
-      visualCategoryHost.innerHTML = categoriasCatalogo.map((category, index) => {
-        const sample = PRODUCTOS.find(product => product.cat === category.id && product.img) || PRODUCTOS.find(product => product.cat === category.id);
-        return '<a class="visual-category" href="#catalogo" data-browse-category="' + safe(category.id) + '" style="--visual-order:' + index + '">' +
-          (sample?.img ? '<img src="' + safe(sample.img) + '" alt="' + safe(category.nombre) + '" loading="lazy">' : '<span class="visual-placeholder">ANLUV</span>') +
-          '<span class="visual-category-shade"></span><span class="visual-category-label"><b>' + safe(category.nombre) + '</b><small>Explorar →</small></span></a>';
+      visualCategoryHost.innerHTML = groupedCategories.map((group, index) => {
+        const categoryIds = group.categories.map(category => category.id);
+        const sample = PRODUCTOS.find(product => categoryIds.includes(product.cat) && product.img) || PRODUCTOS.find(product => categoryIds.includes(product.cat));
+        const includes = group.categories.slice(0, 3).map(category => category.nombre).join(' · ');
+        return '<a class="visual-category" href="#catalogo" data-browse-categories="' + safe(categoryIds.join('|')) + '" style="--visual-order:' + index + '">' +
+          (sample?.img ? '<img src="' + safe(sample.img) + '" alt="' + safe(group.name) + '" loading="lazy">' : '<span class="visual-placeholder">ANLUV</span>') +
+          '<span class="visual-category-shade"></span><span class="visual-category-label"><b>' + safe(group.name) + '</b><small>' + safe(group.detail) + '</small><em>' + safe(includes) + ' · Explorar →</em></span></a>';
       }).join('');
-      if (!categoriasCatalogo.length) $('#seleccion').hidden = true;
+      if (!groupedCategories.length) $('#seleccion').hidden = true;
 
       const visualProductsHost = $('#visual-products');
       const visualProducts = PRODUCTOS.filter(product => product.stock > 0).slice(0, 6);
@@ -575,10 +594,11 @@
       const maxCatalogo = Math.max(5300, ...PRODUCTOS.map(p => Number(p.precio) || 0));
       const estado = { q: '', cats: new Set(), conds: new Set(), tipos: new Set(), marcas: new Set(), max: maxCatalogo, stock: false, orden: 'relevancia' };
 
-      $$('[data-browse-category]').forEach(link => link.addEventListener('click', event => {
+      $$('[data-browse-categories]').forEach(link => link.addEventListener('click', event => {
         event.preventDefault();
-        estado.q = ''; estado.cats = new Set([link.dataset.browseCategory]);
-        $$('.f-cat').forEach(input => { input.checked = input.value === link.dataset.browseCategory; });
+        const categories = link.dataset.browseCategories.split('|');
+        estado.q = ''; estado.cats = new Set(categories);
+        $$('.f-cat').forEach(input => { input.checked = categories.includes(input.value); });
         aplicar(); $('#catalogo').scrollIntoView({behavior:'smooth', block:'start'});
       }));
 
