@@ -551,7 +551,7 @@
       if (!groupedCategories.length) $('#seleccion').hidden = true;
 
       const familyRail = $('#visual-categories');
-      $('[data-family-scroll]').forEach(button => button.addEventListener('click', () => {
+      Array.from(document.querySelectorAll('[data-family-scroll]')).forEach(button => button.addEventListener('click', () => {
         familyRail.scrollBy({ left: (button.dataset.familyScroll === 'next' ? 1 : -1) * Math.min(familyRail.clientWidth * .72, 720), behavior: 'smooth' });
       }));
 
