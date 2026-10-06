@@ -7,9 +7,9 @@
   <meta name="description" content="Tienda de tecnología en Ate, Lima. Laptops, componentes, accesorios y licencias originales con garantía escrita y trato humano de verdad.">
   <link rel="canonical" href="https://anluv.com/">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"ANLUV","url":"https://anluv.com/","logo":"https://anluv.com/assets/brand/logo-mark.svg"},{"@type":"WebSite","name":"ANLUV","url":"https://anluv.com/","inLanguage":"es-PE"}]}</script>
-  <link rel="stylesheet" href="assets/anluv.css?v=20261006-hig-4-6">
+  <link rel="stylesheet" href="assets/anluv.css?v=20261006-hig-7-10">
   <style id="hig-clarity-overrides">
-    .search-actions,.search-tabs,.search-modo:not([data-modo="texto"]),#btn-pdf{display:none}.busca-movil .search-actions{display:none!important}.searchbox input{padding-right:18px}.hero-ctas{gap:0}.hero-foot span:nth-child(n+2){display:none}.visual-category{grid-template-rows:174px minmax(92px,auto);background:var(--surface);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.visual-category:hover{transform:translateY(-2px)}.visual-category img{object-position:center;padding:20px;filter:saturate(.9) contrast(.98);transition:transform .2s ease}.visual-category:hover img{transform:scale(1.02)}.visual-category-label{min-height:92px;padding:14px 14px 16px;border-top:1px solid var(--border)}
+    .search-actions,.search-tabs,.search-modo:not([data-modo="texto"]),#btn-pdf{display:none}.busca-movil .search-actions{display:none!important}.searchbox input{padding-right:18px}.hero-ctas{gap:0}.hero-foot span:nth-child(n+2){display:none}.visual-category{grid-template-rows:174px minmax(92px,auto);background:var(--surface);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.visual-category:hover{transform:translateY(-2px)}.visual-category img{object-position:center;padding:20px;filter:saturate(.9) contrast(.98);transition:transform .2s ease}.visual-category:hover img{transform:scale(1.02)}.visual-category-label{min-height:92px;padding:14px 14px 16px;border-top:1px solid var(--border)}:root{--radius-control:12px;--radius-surface:16px;--radius:var(--radius-surface);--font-display:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--font-body:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}h1,h2,h3,h4{font-family:var(--font-display)}h1{letter-spacing:-.035em}h2{letter-spacing:-.025em}h3,h4{letter-spacing:-.012em}.hero h1,.license-showcase h2{font-family:"Clash Display",var(--font-display)}.btn{border-radius:var(--radius-control);box-shadow:none}.card{border-radius:var(--radius-surface);box-shadow:none;transition:transform .2s ease,border-color .2s ease}.card:hover{transform:translateY(-2px);box-shadow:none}.card-media{aspect-ratio:1/1;background:var(--surface-2)}.card-media img{object-fit:contain;padding:18px;transition:transform .25s ease}.card:hover .card-media img{transform:scale(1.02)}.wish{width:34px;height:34px;border-radius:var(--radius-control);border:1px solid var(--border);box-shadow:none}.wish:hover{transform:scale(1.04)}.card-acciones{grid-template-columns:1fr}.card-secondary{display:flex;justify-content:flex-end;min-height:18px}.card-secondary .card-compare{margin:0;color:var(--muted);font-size:11.5px}.card-disponibilidad{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12.5px}.card-disponibilidad:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}.card-disponibilidad.agotado:before{background:var(--muted)}@media(max-width:760px){.card{border-radius:var(--radius-surface)}.drawer{border-radius:var(--radius-surface) var(--radius-surface) 0 0}.license-mark{border-radius:var(--radius-control)}}
   </style>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231B4F72'/%3E%3Cpath d='M6 20c3-4 7-4 10 0s7 4 10 0' stroke='%2317A2B8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 </head>
@@ -571,7 +571,6 @@
       }
 
       function tarjeta(p) {
-        const c = CONDICIONES[p.condicion];
         const esDigital = p.tipo === 'digital';
         const url = 'producto.html?id=' + p.id + (Anluv.moneda === 'USD' ? '&usd=1' : '');
         const media = esDigital
@@ -583,8 +582,9 @@
               ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>Digital'
               : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>Físico') + '</span>' +
           '</div>';
-        const condHTML = esDigital ? '' :
-          '<div class="card-cond"><span class="punto ' + c.clase + '"></span>' + c.nombre + ' · ' + c.detalle + '</div>';
+        const disponibilidad = p.stock > 0
+          ? '<div class="card-disponibilidad">Disponible</div>'
+          : '<div class="card-disponibilidad agotado">Agotado</div>';
         return (
           '<article class="card' + (esDigital ? ' es-digital' : '') + '" data-od-id="card-' + p.id + '">' +
             media + badges +
@@ -592,22 +592,13 @@
               '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21Z"/></svg>' +
             '</button>' +
             '<div class="card-cuerpo">' +
-              condHTML +
               '<h3><a href="producto.html?id=' + p.id + '">' + p.nombre + '</a></h3>' +
-              '<div class="card-envio">' +
-                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3m10 0h2v-5l4-4h-6"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>' +
-                p.envio +
-              '</div>' +
-              '<div class="card-precio"><span class="precio" data-precio="' + p.precio + '">' + Anluv.precioDual(p.precio, 'Incluye IGV') + '</span></div>' +
+              disponibilidad +
+              '<div class="card-precio"><span class="precio" data-precio="' + p.precio + '">' + Anluv.precio(p.precio) + '</span></div>' +
               '<div class="card-acciones">' +
-                '<a class="btn btn-ghost" href="producto.html?id=' + p.id + '">Ver detalles</a>' +
-                '<button class="btn btn-primary" type="button" data-add="' + p.id + '"' + (p.stock === 0 ? ' disabled' : '') + '>Añadir</button>' +
-                '<button class="btn btn-buy" type="button" data-buy="' + p.id + '"' + (p.stock === 0 ? ' disabled' : '') + '>' +
-                  '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7Z"/></svg>' +
-                  'Comprar ahora' +
-                '</button>' +
+                '<button class="btn btn-primary" type="button" data-add="' + p.id + '"' + (p.stock === 0 ? ' disabled' : '') + '>Añadir al carrito</button>' +
               '</div>' +
-              '<button class="card-compare" type="button" data-compare="' + p.id + '">Comparar producto</button>' +
+              '<div class="card-secondary"><button class="card-compare" type="button" data-compare="' + p.id + '">Comparar</button></div>' +
             '</div>' +
           '</article>'
         );
