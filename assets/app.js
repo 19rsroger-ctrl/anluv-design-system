@@ -198,13 +198,13 @@
   }
   function cerrarDrawers() {
     $('#overlay').classList.remove('open');
-    $('.drawer').forEach(d => { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); });
+    $$('.drawer').forEach(d => { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); });
     document.body.classList.remove('no-scroll');
     if (drawerTrigger && typeof drawerTrigger.focus === 'function') drawerTrigger.focus({ preventScroll: true });
     drawerTrigger = null;
   }
-  $('[data-open-cart]').forEach(b => b.addEventListener('click', () => { pintarCarrito(); abrirDrawer('#drawer-carrito', b); }));
-  $('[data-close]').forEach(b => b.addEventListener('click', cerrarDrawers));
+  $$('[data-open-cart]').forEach(b => b.addEventListener('click', () => { pintarCarrito(); abrirDrawer('#drawer-carrito', b); }));
+  $$('[data-close]').forEach(b => b.addEventListener('click', cerrarDrawers));
   const ov = $('#overlay');
   if (ov) ov.addEventListener('click', cerrarDrawers);
   document.addEventListener('keydown', e => {
@@ -212,7 +212,7 @@
     if (e.key !== 'Tab') return;
     const abierto = $('.drawer.open');
     if (!abierto) return;
-    const focusables = $('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])', abierto).filter(el => !el.hidden);
+    const focusables = $$('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])', abierto).filter(el => !el.hidden);
     if (!focusables.length) return;
     const first = focusables[0], last = focusables[focusables.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -220,7 +220,7 @@
   });
 
   /* En móvil, la hoja responde al dedo: sigue el arrastre y conserva la intención al soltar. */
-  $('[data-sheet-handle]').forEach(handle => {
+  $$('[data-sheet-handle]').forEach(handle => {
     const sheet = handle.closest('.drawer');
     let drag = null, frame = 0;
     handle.addEventListener('pointerdown', event => {
