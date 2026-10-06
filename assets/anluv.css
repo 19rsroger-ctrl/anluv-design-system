@@ -116,7 +116,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
 .searchbox { position: relative; flex: 1; max-width: 520px; isolation: isolate; }
 .searchbox input {
   width: 100%; height: 46px;
-  padding: 0 112px 0 46px;
+  padding: 0 18px 0 46px;
   border-radius: 999px;
   border: 1.5px solid var(--border);
   background: var(--surface);
@@ -222,6 +222,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
 .hero-foot { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 10px; font-size: 14px; color: oklch(0.85 0.03 230); }
 .hero-foot span { display: inline-flex; align-items: center; gap: 8px; }
+
+/* La portada ofrece una decisión clara: buscar o explorar. Las funciones auxiliares
+   siguen disponibles en sus flujos específicos, sin competir por atención aquí. */
+.search-actions,
+.search-tabs,
+.search-modo:not([data-modo="texto"]),
+#btn-pdf { display:none; }
+.busca-movil .search-actions { display:none !important; }
+.hero-ctas { gap:0; }
+.hero-foot span:nth-child(n + 2) { display:none; }
 
 /* — Botones — */
 .btn {
@@ -964,11 +974,11 @@ html[data-theme='dark'] .cta-movil-precio .precio-m { color: var(--fg); }
 .family-carousel { position:relative; }
 .visual-categories { display:flex; gap:12px; overflow-x:auto; padding:4px 3px 14px; scroll-snap-type:x mandatory; scrollbar-width:none; overscroll-behavior-inline:contain; }
 .visual-categories::-webkit-scrollbar { display:none; }
-.visual-category { display:grid; grid-template-rows:174px auto; flex:0 0 clamp(154px,14.4vw,202px); min-width:0; overflow:hidden; border:1px solid var(--border); border-radius:18px; background:var(--surface-2); color:var(--text); scroll-snap-align:start; box-shadow:var(--shadow-1); transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease; }
-.visual-category:hover { transform:translateY(-5px); border-color:color-mix(in oklab,var(--accent) 55%,var(--border)); box-shadow:var(--shadow-2); }
-.visual-category img { width:100%; height:100%; object-fit:contain; padding:14px; background:linear-gradient(145deg,oklch(.97 .008 220),oklch(.91 .02 220)); transition:transform .45s cubic-bezier(.2,.7,.2,1); }
-.visual-category:hover img { transform:scale(1.055); }
-.visual-category-label { display:grid; min-height:84px; align-content:center; gap:5px; padding:13px 14px 15px; }
+.visual-category { display:grid; grid-template-rows:174px minmax(92px,auto); flex:0 0 clamp(154px,14.4vw,202px); min-width:0; overflow:hidden; border:1px solid var(--border); border-radius:18px; background:var(--surface); color:var(--text); scroll-snap-align:start; box-shadow:var(--shadow-1); transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease; }
+.visual-category:hover { transform:translateY(-2px); border-color:color-mix(in oklab,var(--accent) 55%,var(--border)); box-shadow:var(--shadow-2); }
+.visual-category img { width:100%; height:100%; object-fit:contain; object-position:center; padding:20px; background:linear-gradient(145deg,oklch(.97 .008 220),oklch(.93 .012 220)); filter:saturate(.9) contrast(.98); transition:transform .2s ease; }
+.visual-category:hover img { transform:scale(1.02); }
+.visual-category-label { display:grid; min-height:92px; align-content:center; gap:5px; padding:14px 14px 16px; border-top:1px solid var(--border); }
 .visual-category-label b { font:600 16px/1.1 var(--font-display); letter-spacing:-.025em; }
 .visual-category-label small { overflow:hidden; color:var(--muted); font-size:11px; line-height:1.3; white-space:nowrap; text-overflow:ellipsis; }
 .visual-placeholder { display:grid; place-items:center; min-height:174px; background:var(--digital-grad); color:#fff; font:700 28px/1 var(--font-display); }
