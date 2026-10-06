@@ -183,24 +183,73 @@
   }
 
   /* Drawer / overlay genérico */
-  function abrirDrawer(id) {
+  let drawerTrigger = null;
+  function abrirDrawer(id, trigger) {
     const d = $(id);
     if (!d) return;
+    drawerTrigger = trigger || document.activeElement;
+    d.style.removeProperty('transform');
     $('#overlay').classList.add('open');
     d.classList.add('open');
     d.setAttribute('aria-hidden', 'false');
     document.body.classList.add('no-scroll');
+    const focusTarget = $('button, [href], input, select, textarea', d);
+    if (focusTarget) requestAnimationFrame(() => focusTarget.focus({ preventScroll: true }));
   }
   function cerrarDrawers() {
     $('#overlay').classList.remove('open');
-    $$('.drawer').forEach(d => { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); });
+    $('.drawer').forEach(d => { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); });
     document.body.classList.remove('no-scroll');
+    if (drawerTrigger && typeof drawerTrigger.focus === 'function') drawerTrigger.focus({ preventScroll: true });
+    drawerTrigger = null;
   }
-  $$('[data-open-cart]').forEach(b => b.addEventListener('click', () => { pintarCarrito(); abrirDrawer('#drawer-carrito'); }));
-  $$('[data-close]').forEach(b => b.addEventListener('click', cerrarDrawers));
+  $('[data-open-cart]').forEach(b => b.addEventListener('click', () => { pintarCarrito(); abrirDrawer('#drawer-carrito', b); }));
+  $('[data-close]').forEach(b => b.addEventListener('click', cerrarDrawers));
   const ov = $('#overlay');
   if (ov) ov.addEventListener('click', cerrarDrawers);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDrawers(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { cerrarDrawers(); return; }
+    if (e.key !== 'Tab') return;
+    const abierto = $('.drawer.open');
+    if (!abierto) return;
+    const focusables = $('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])', abierto).filter(el => !el.hidden);
+    if (!focusables.length) return;
+    const first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* En móvil, la hoja responde al dedo: sigue el arrastre y conserva la intención al soltar. */
+  $('[data-sheet-handle]').forEach(handle => {
+    const sheet = handle.closest('.drawer');
+    let drag = null, frame = 0;
+    handle.addEventListener('pointerdown', event => {
+      if (!window.matchMedia('(max-width: 640px)').matches || !sheet.classList.contains('open')) return;
+      handle.setPointerCapture(event.pointerId);
+      drag = { pointerId: event.pointerId, startY: event.clientY, offset: 0, samples: [{ y: event.clientY, time: performance.now() }] };
+      sheet.classList.add('dragging');
+    });
+    handle.addEventListener('pointermove', event => {
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      drag.offset = Math.max(0, event.clientY - drag.startY);
+      drag.samples.push({ y: event.clientY, time: performance.now() });
+      if (drag.samples.length > 5) drag.samples.shift();
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => { sheet.style.transform = 'translateY(' + drag.offset + 'px)'; });
+    });
+    const terminarArrastre = event => {
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      const first = drag.samples[0], last = drag.samples[drag.samples.length - 1];
+      const velocity = (last.y - first.y) / Math.max(1, last.time - first.time);
+      const shouldClose = drag.offset > sheet.getBoundingClientRect().height * .24 || velocity > .78;
+      sheet.classList.remove('dragging');
+      if (shouldClose) cerrarDrawers();
+      else sheet.style.removeProperty('transform');
+      drag = null;
+    };
+    handle.addEventListener('pointerup', terminarArrastre);
+    handle.addEventListener('pointercancel', terminarArrastre);
+  });
 
   /* ---------- Compra rápida (Comprar Ahora — 2 pantallas) ---------- */
   const QB = { items: [], paso: 1, comprobante: 'Boleta' };
