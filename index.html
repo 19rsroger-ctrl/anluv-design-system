@@ -26,6 +26,11 @@
         </svg>
         ANLUV<span class="ola">.</span>
       </a>
+      <nav class="store-links" aria-label="Secciones de la tienda">
+        <a href="#seleccion">Familias</a>
+        <a href="#destacados">Destacados</a>
+        <a href="#ayuda">Ayuda</a>
+      </nav>
 
       <div class="searchbox-wrap searchbox" data-od-id="buscador-header">
         <svg class="s-lupa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -194,8 +199,34 @@
       </div>
     </section>
 
+    <section class="store-section store-products" id="destacados" data-od-id="seccion-destacados">
+      <div class="wrap">
+        <div class="store-section-head"><div><span class="eyebrow">Selección de ANLUV</span><h2>Lo que vale la pena mirar ahora.</h2></div><p>Una selección corta para descubrir productos reales sin empezar por un catálogo infinito.</p></div>
+        <div id="latest-products" class="store-rail" aria-label="Productos destacados"></div>
+        <a class="text-link store-all-link" href="#catalogo">Ver todo el catálogo <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="store-section store-accessories" id="accesorios" data-od-id="seccion-accesorios">
+      <div class="wrap">
+        <div class="store-section-head"><div><span class="eyebrow">Accesorios</span><h2>Pequeños productos. Grandes mejoras.</h2></div><p>Cables, energía, periféricos y complementos para que tus equipos funcionen mejor.</p></div>
+        <div id="accessory-products" class="store-rail" aria-label="Accesorios y periféricos"></div>
+      </div>
+    </section>
+
     <section class="license-showcase" id="licencias" data-od-id="seccion-licencias">
       <div class="wrap"><div class="license-showcase-head"><div><span class="eyebrow">Entrega inmediata</span><h2>Licencias originales.<br>Listas para usar hoy.</h2></div><p>Software genuino, comprobante y ayuda de instalación cuando la necesites.</p></div><div id="license-products" class="license-products"></div></div>
+    </section>
+
+    <section class="store-section store-help" id="ayuda" data-od-id="seccion-ayuda">
+      <div class="wrap">
+        <div class="store-section-head"><div><span class="eyebrow">Aquí para ayudarte</span><h2>Compra con una persona, no a ciegas.</h2></div><p>Elige tu producto, recibe orientación y deja lista tu compra sin tener que saber de tecnología.</p></div>
+        <div class="help-grid">
+          <a class="help-card" href="https://wa.me/51906186548?text=Hola%20ANLUV%2C%20necesito%20ayuda%20para%20elegir%20un%20producto." target="_blank" rel="noopener"><span class="help-icon">↗</span><b>Habla con ANLUV</b><p>Cuéntanos para qué lo necesitas y te orientamos por WhatsApp.</p><span>Escribir ahora →</span></a>
+          <a class="help-card" href="#catalogo"><span class="help-icon">⌕</span><b>Encuentra el producto correcto</b><p>Busca, filtra y compara con precios y stock claros.</p><span>Explorar catálogo →</span></a>
+          <a class="help-card" href="#confianza"><span class="help-icon">✓</span><b>Recibe ayuda después de comprar</b><p>Garantía escrita, coordinación de entrega y acompañamiento.</p><span>Conocer cómo compramos →</span></a>
+        </div>
+      </div>
     </section>
 
     <!-- ============ Catálogo ============ -->
@@ -290,6 +321,7 @@
     <!-- ============ Confianza: comprar sin miedo (compacta) ============ -->
     <section class="poster" id="confianza" data-od-id="seccion-confianza">
       <div class="wrap">
+        <div class="store-section-head difference-head"><div><span class="eyebrow">La diferencia ANLUV</span><h2>Más razones para comprar con tranquilidad.</h2></div><p>Información clara y ayuda real antes, durante y después de tu compra.</p></div>
         <div class="confianza-franja reveal" data-od-id="confianza-franja">
           <div class="confianza-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
@@ -537,6 +569,17 @@
       licenseProductsHost.innerHTML = licenses.map(product =>
         '<article class="license-product"><div class="license-mark">' + safe(product.marca?.slice(0, 1) || 'A') + '</div><div><span class="license-kicker">Licencia digital · Entrega inmediata</span><h3>' + safe(product.nombre) + '</h3><p>' + safe(product.resumen || 'Licencia original con activación asistida.') + '</p><div class="license-bottom"><div class="precio" data-precio="' + product.precio + '">' + Anluv.precioDual(product.precio, 'Incluye IGV') + '</div><button class="btn btn-accent btn-sm" type="button" data-buy="' + safe(product.id) + '">Comprar ahora</button></div></div></article>'
       ).join('');
+
+      function storeProduct(product) {
+        const media = product.img
+          ? '<img src="' + safe(product.img) + '" alt="' + safe(product.nombre) + '" loading="lazy">'
+          : '<span aria-hidden="true">' + safe(product.marca?.slice(0, 1) || 'A') + '</span>';
+        return '<article class="store-product"><a class="store-product-media" href="producto.html?id=' + safe(product.id) + '">' + media + '</a><div class="store-product-copy"><small>' + safe(product.marca || 'ANLUV') + '</small><h3><a href="producto.html?id=' + safe(product.id) + '">' + safe(product.nombre) + '</a></h3><div class="store-product-bottom"><span class="precio" data-precio="' + product.precio + '">' + Anluv.precio(product.precio) + '</span><button class="add-quiet" type="button" data-add="' + safe(product.id) + '"' + (product.stock === 0 ? ' disabled' : '') + '>' + (product.stock === 0 ? 'Agotado' : 'Añadir') + '</button></div></div></article>';
+      }
+      const disponibles = PRODUCTOS.filter(product => product.stock > 0);
+      $('#latest-products').innerHTML = disponibles.slice(0, 8).map(storeProduct).join('');
+      const accesorios = disponibles.filter(product => /accesor|cable|cargador|adaptador|mouse|teclado|soporte|bater[ií]a|mochila|control/i.test((product.cat + ' ' + product.nombre).toLowerCase())).slice(0, 8);
+      $('#accessory-products').innerHTML = (accesorios.length ? accesorios : disponibles.slice(0, 8)).map(storeProduct).join('');
 
       /* — Estado de filtros — */
       const maxCatalogo = Math.max(5300, ...PRODUCTOS.map(p => Number(p.precio) || 0));
